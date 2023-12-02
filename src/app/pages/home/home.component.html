@@ -1,0 +1,56 @@
+
+<div class="tela">
+
+  <mat-drawer-container class="drawer-container">
+
+    <mat-drawer #drawer class="drawer" mode="side">
+
+      <div class="container-drawer">
+
+
+        <hr class="divider" />
+
+        <mat-button-toggle-group [formControl]="Relatorio" (change)="navigateTo()">
+
+          <mat-button-toggle checked="true" value="home/adm">
+            <mat-icon matPrefix class="std_gray">settings </mat-icon>
+            Administrador
+          </mat-button-toggle>
+
+          <mat-button-toggle  value="home/comum">
+            <mat-icon matPrefix class="std_gray">people_outline</mat-icon>
+            Usuário comum
+          </mat-button-toggle>
+
+          <mat-button-toggle value="home/produtor">
+            <mat-icon matPrefix class="std_gray">work</mat-icon>
+            Produtor de Eventos
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
+      </div>
+
+    </mat-drawer>
+
+    <mat-toolbar class="toolbar" color="primary">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <!-- Adiciona um espaço flexível para empurrar os elementos para a direita -->
+      <span class="flex-space"></span>
+
+      <div class="user-profile">
+
+      </div>
+    </mat-toolbar>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="deslogar()">Sair</button>
+    </mat-menu>
+
+  <router-outlet></router-outlet>
+
+
+  </mat-drawer-container>
+</div>

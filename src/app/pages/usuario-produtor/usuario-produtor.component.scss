@@ -1,0 +1,89 @@
+.card {
+  height: auto;
+  margin: 10px;
+}
+
+.form-field {
+  padding: 0px;
+  width: 100%;
+  margin: 0px 10px 0px 10px;
+  height: min-content;
+  margin-bottom: -0.75em;
+
+}
+
+.filtro mat-panel-description {
+  display: contents;
+
+}
+
+.filtro mat-icon {
+  padding-top: 0.5em;
+  padding-right: 1em;
+
+}
+
+.filtro mat-expansion-panel-header {
+  min-height: 50px;
+  height: fit-content;
+
+}
+
+.filtro mat-panel-title {
+  font-size: large;
+  font-weight: bold;
+}
+
+.chipspace {
+  width: 100%;
+  height: 200%;
+}
+
+::ng-deep .mat-mdc-text-field-wrappe {
+  height: 40px;
+}
+
+.button-login {
+  width: 100px;
+  align-self: center;
+  color: #fff !important;
+  margin: 0px 10px 0px 10px;
+}
+
+.filtrar-limpar {
+  row-gap: 5px;
+  justify-content: flex-end;
+  display: flex;
+
+}
+
+mat-grid-list {
+  width: 100%;
+  height: 100%;
+  margin: 0.5em 0px 0px 0px;
+}
+
+mat-card {
+  width: 95%;
+  margin-left: 2.5%;
+  //height: 95%;
+}
+
+h1 {
+  text-align-last: center;
+}
+
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.example-container {
+  width: 100%;
+  overflow: auto;
+}

@@ -1,0 +1,26 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import { environment } from 'src/environment/environments';
+import { APIReturns } from '../model/APIReturns';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ClasEtariaService {
+  private apiUrl: string = environment.apiUrl;
+
+  constructor(private http: HttpClient) {}
+
+  listarClasEtariasCommon(): Observable<APIReturns[]> {
+    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/clas-etaria`);
+  }
+
+  listarClasEtariasProductor(): Observable<APIReturns[]> {
+    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/clas-etaria`);
+  }
+
+  listarClasEtariasAdm(): Observable<APIReturns[]> {
+    return this.http.get<APIReturns[]>(`${this.apiUrl}/admin/clas-etaria`);
+  }
+}

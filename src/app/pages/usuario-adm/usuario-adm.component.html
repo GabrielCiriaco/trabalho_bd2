@@ -1,0 +1,334 @@
+<mat-expansion-panel class="filtro">
+
+  <!-- Cabeçalho do expansion panel -------------------------------------------------------------------------- -->
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Filtros
+    </mat-panel-title>
+    <mat-panel-description>
+      <div class="chipspace">
+        <mat-chip-listbox>
+
+          <mat-chip-row *ngFor="let filterChip of chipShow">
+            {{filterChip}}
+          </mat-chip-row>
+        </mat-chip-listbox>
+      </div>
+      <mat-icon>filter_alt</mat-icon>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <!-- Filtros do expansion panel -------------------------------------------------------------------------- -->
+  <div>
+    <form [formGroup]="filterForm">
+      <mat-grid-list [cols]="isTelaMenorQue500px" rowHeight="80px">
+
+        <!-- Filtro de evento------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Evento</mat-label>
+            <input type="text" placeholder="Evento" (blur)="addFiltroInput('eventos')" matInput
+              formControlName="eventos" [matAutocomplete]="completeEvento">
+            <mat-error *ngIf="filterForm.get('eventos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeEvento="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsEventos | async"
+                (onSelectionChange)="addFiltroSelect($event,'evento', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+        </mat-grid-tile>
+
+        <!-- Filtro de espaco------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Espaço</mat-label>
+            <input type="text" placeholder="Espaço" (blur)="addFiltroInput('espacos')" matInput
+              formControlName="espacos" [matAutocomplete]="completeEspaco">
+            <mat-error *ngIf="filterForm.get('espacos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeEspaco="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsEspacos | async"
+                (onSelectionChange)="addFiltroSelect($event,'espaco', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+        </mat-grid-tile>
+
+        <!-- Filtro de clasEtaria------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Classificação Etária</mat-label>
+            <input type="text" placeholder="Classificação Etária" (blur)="addFiltroInput('clasEtarias')" matInput
+              formControlName="clasEtarias" [matAutocomplete]="completeClassEtaria">
+            <mat-error *ngIf="filterForm.get('clasEtarias')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeClassEtaria="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsClasesEtarias | async"
+                (onSelectionChange)="addFiltroSelect($event,'clasEtaria', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+        </mat-grid-tile>
+
+
+        <!-- Filtro de donoEspaco------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Dono do Espaço</mat-label>
+            <input type="text" placeholder="Dono do Espaço" (blur)="addFiltroInput('donoEspacos')" matInput
+              formControlName="donoEspacos" [matAutocomplete]="completeDonoEspaco">
+            <mat-error *ngIf="filterForm.get('donoEspacos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeDonoEspaco="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsDonoEspacos | async"
+                (onSelectionChange)="addFiltroSelect($event,'donoEspaco', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+        </mat-grid-tile>
+
+        <!-- Filtro de donoEvento------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Dono do Evento</mat-label>
+            <input type="text" placeholder="Dono do Evento" (blur)="addFiltroInput('donoEventos')" matInput
+              formControlName="donoEventos" [matAutocomplete]="completeDonoEvento">
+            <mat-error *ngIf="filterForm.get('donoEventos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeDonoEvento="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsDonoEventos | async"
+                (onSelectionChange)="addFiltroSelect($event,'donoEvento', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+        </mat-grid-tile>
+
+        <!-- Filtro de donoProjeto------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Dono do Projeto</mat-label>
+            <input type="text" placeholder="Dono do Projeto" (blur)="addFiltroInput('donoProjetos')" matInput
+              formControlName="donoProjetos" [matAutocomplete]="completeDonoProjeto">
+            <mat-error *ngIf="filterForm.get('donoProjetos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeDonoProjeto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsDonoProjetos | async"
+                (onSelectionChange)="addFiltroSelect($event,'donoProjeto', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Filtro de data ------------------------------------------------------------------------ -->
+        <mat-grid-tile>
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Data inicial</mat-label>
+            <input matInput formControlName="dataInicial" (blur)="addFiltroInput('dataInicial')"
+              (dateChange)="setDate($event)" [max]="maxDate" [matDatepicker]="data_inicial">
+            <mat-datepicker-toggle matIconSuffix [for]="data_inicial"></mat-datepicker-toggle>
+            <mat-datepicker #data_inicial></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Filtro de data ------------------------------------------------------------------------ -->
+        <mat-grid-tile>
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Data final</mat-label>
+            <input formControlName="dataFinal" (blur)="addFiltroInput('dataFinal')" (dateChange)="setDate($event)"
+              [max]="todayDate" [min]="minDate" matInput [matDatepicker]="data_final" [disabled]="true">
+            <mat-datepicker-toggle matIconSuffix [for]="data_final"></mat-datepicker-toggle>
+            <mat-datepicker disabled="false" #data_final></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+
+
+      </mat-grid-list>
+
+    </form>
+
+    <div class="filtrar-limpar">
+      <button mat-raised-button [disabled]="!validForm()" (click)="filtrar()" class="button-login" color="primary">
+        Filtrar
+      </button>
+      <button mat-raised-button [disabled]="validClearFilter()" (click)="limparFiltros()" class="button-login"
+        color="primary">
+        Limpar Filtros
+      </button>
+    </div>
+
+  </div>
+
+</mat-expansion-panel>
+
+<mat-tab-group>
+  <mat-tab label="Dasboard Imprensa">
+    <div #dashboard>
+      <h1>Imprensa</h1>
+      <button mat-raised-button (click)="gerarPDF()" class="button-login" color="primary">
+        Gerar PDF
+      </button>
+
+      <button mat-raised-button (click)="gerarDashboard()" class="button-login" color="primary">
+        Gerar Dashboard
+      </button>
+
+      <mat-grid-list [cols]="nubergraphs" rowHeight="440px">
+
+        <mat-grid-tile>
+          <mat-card>
+            <mat-card-content>
+              <app-doughnut-chart #qualquer (chartImage)="handleChartImage($event)" [data]="dataSentimento"
+                [color]="colorSentimento" title='Notícias por Sentimento'></app-doughnut-chart>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card>
+            <mat-card-content>
+              <app-doughnut-chart #qualquer (chartImage)="handleChartImage($event)" [data]="dataMidia"
+                [color]="colorMidia" title='Notícias por Tipos de Mídia'></app-doughnut-chart>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card>
+            <mat-card-content>
+              <app-doughnut-chart #qualquer (chartImage)="handleChartImage($event)" [data]="dataVeiculo"
+                title='Notícias por Veículo'></app-doughnut-chart>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+
+
+      </mat-grid-list>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Tabela Imprensa">
+    <h1>Tabela de dados</h1>
+    <mat-card>
+      <mat-card-content>
+        <div class="mat-elevation-z8">
+          <section class="example-container mat-elevation-z8" tabindex="0">
+
+
+            <table mat-table [dataSource]="dataSource" matSort class="example-container">
+
+              <!-- ID Column -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+              </ng-container>
+
+              <!-- datapubli Column -->
+              <ng-container matColumnDef="datapubli">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+                <td mat-cell *matCellDef="let row"> {{row.datapubli}} </td>
+              </ng-container>
+
+              <!-- grupo Column -->
+              <ng-container matColumnDef="grupo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Grupo</th>
+                <td mat-cell *matCellDef="let row"> {{row.grupo}} </td>
+              </ng-container>
+
+              <!-- empresa Column -->
+              <ng-container matColumnDef="empresa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
+                <td mat-cell *matCellDef="let row"> {{row.empresa}} </td>
+              </ng-container>
+
+              <!-- midia Column -->
+              <ng-container matColumnDef="midia">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Mídia</th>
+                <td mat-cell *matCellDef="let row"> {{row.midia}} </td>
+              </ng-container>
+
+              <!-- veiculo Column -->
+              <ng-container matColumnDef="veiculo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Veículo</th>
+                <td mat-cell *matCellDef="let row"> {{row.veiculo}} </td>
+              </ng-container>
+
+              <!-- programa Column -->
+              <ng-container matColumnDef="programa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Programa</th>
+                <td mat-cell *matCellDef="let row"> {{row.programa}} </td>
+              </ng-container>
+
+              <!-- categoria Column -->
+              <ng-container matColumnDef="categoria">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+                <td mat-cell *matCellDef="let row"> {{row.categoria}} </td>
+              </ng-container>
+
+              <!-- subcategoria Column -->
+              <ng-container matColumnDef="subcategoria">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Subcategoria</th>
+                <td mat-cell *matCellDef="let row"> {{row.subcategoria}} </td>
+              </ng-container>
+
+              <!-- sentimento Column -->
+              <ng-container matColumnDef="sentimento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sentimento</th>
+                <td mat-cell *matCellDef="let row"> {{row.sentimento}} </td>
+              </ng-container>
+
+              <!-- titulo Column -->
+              <ng-container matColumnDef="titulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
+                <td mat-cell *matCellDef="let row"> {{row.titulo}} </td>
+              </ng-container>
+
+              <!-- arquivo Column -->
+              <ng-container matColumnDef="arquivo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Arquivo</th>
+                <td mat-cell *matCellDef="let row"> {{row.arquivo}} </td>
+              </ng-container>
+
+
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+
+              </tr>
+            </table>
+          </section>
+
+          <mat-paginator [pageSizeOptions]="[10, 50, 100]" (page)="handlePageEvent($event)" [length]="length"
+            [pageSize]="rowsPerPage" [pageIndex]="paginaAtual-1" [showFirstLastButtons]="true">
+
+          </mat-paginator>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+
+</mat-tab-group>
