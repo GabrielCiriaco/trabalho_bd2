@@ -7,20 +7,18 @@ import { APIReturns } from '../model/APIReturns';
 @Injectable({
   providedIn: 'root',
 })
-export class EventoService {
+export class ProjetoService {
   private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-  listarEventosCommon(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/events/names`);
+  listarProjetosProductor(): Observable<APIReturns[]> {
+    return this.http.get<APIReturns[]>(
+      `${this.apiUrl}/productor/project/names`
+    );
   }
 
-  listarEventosProductor(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/events/names`);
-  }
-
-  listarEventosAdm(): Observable<APIReturns[]> {
+  listarProjetosAdm(): Observable<APIReturns[]> {
     return this.http.get<APIReturns[]>(`${this.apiUrl}/admin/events`);
   }
 }

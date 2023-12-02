@@ -14,7 +14,7 @@ export class ProprietarioProjetoService {
 
   listarProprietarioProjeto(): Observable<APIReturns[]> {
     return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/produtor/project/owner/names`
+      `${this.apiUrl}/productor/project/owner/names`
     );
   }
 }

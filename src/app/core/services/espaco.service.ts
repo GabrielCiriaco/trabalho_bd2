@@ -13,11 +13,11 @@ export class EspacoService {
   constructor(private http: HttpClient) {}
 
   listarEspacosCommon(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/space`);
+    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/spaces/names`);
   }
 
   listarEspacosProductor(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/space`);
+    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/spaces/names`);
   }
 
   listarEspacosAdm(): Observable<APIReturns[]> {

@@ -61,6 +61,26 @@
 
         </mat-grid-tile>
 
+        <!-- Filtro de projeto------------------------------------------------------------------------ -->
+        <mat-grid-tile [colspan]="1">
+
+          <mat-form-field class="form-field" appearance="outline">
+
+            <mat-label>Projeto</mat-label>
+            <input type="text" placeholder="Projeto" (blur)="addFiltroInput('projetos')" matInput formControlName="projetos"
+              [matAutocomplete]="completeProjeto">
+            <mat-error *ngIf="filterForm.get('projetos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
+            <mat-autocomplete autoActiveFirstOption #completeProjeto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsProjetos | async"
+                (onSelectionChange)="addFiltroSelect($event,'projeto', option.name)" [value]="option.name">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+        </mat-grid-tile>
+
         <!-- Filtro de clasEtaria------------------------------------------------------------------------ -->
         <mat-grid-tile [colspan]="1">
           <mat-form-field class="form-field" appearance="outline">

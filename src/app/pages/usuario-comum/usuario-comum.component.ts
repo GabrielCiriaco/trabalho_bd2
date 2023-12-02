@@ -28,7 +28,7 @@ import { ClasEtariaService } from 'src/app/core/services/clas-etaria.service';
 import { APIReturns } from 'src/app/core/model/APIReturns';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { DoughnutChartComponent } from 'src/app/shared/echarts/doughnut-chart/doughnut-chart.component';
-import { DataAdminService } from 'src/app/core/services/data-admin.service';
+import { RequestsService } from 'src/app/core/services/requests-data.service';
 
 interface filterSelected {
   evento: string;
@@ -109,18 +109,14 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   >{};
 
   displayedColumns: string[] = [
-    'id',
-    'datapubli',
-    'grupo',
-    'empresa',
-    'midia',
-    'veiculo',
-    'programa',
-    'categoria',
-    'subcategoria',
-    'sentimento',
-    'titulo',
-    'arquivo',
+    'name',
+    'description',
+    'classEtaria',
+    'data',
+    'horaInicio',
+    'horaFim',
+    'space',
+    'location',
   ];
   dataSource: MatTableDataSource<any>;
 
@@ -136,7 +132,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     private eventoService: EventoService,
     private espacoService: EspacoService,
     private clasEtariaService: ClasEtariaService,
-    private dataAdminService: DataAdminService
+    private requestsService: RequestsService
   ) {
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(this.dataTabela);
@@ -166,57 +162,10 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             this.listar_eventos(),
             this.listar_espacos(),
             this.listar_clasEtarias(),
+
             new Promise((resolve, reject) => {
-              this.dataAdminService.noticiaPorSentimento(request).subscribe({
-                next: (value) => {
-                  this.dataSentimento = value;
-                  this.colorSentimento = this.setColorSentimento(
-                    this.dataSentimento
-                  );
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService.noticiaPorMidia(request).subscribe({
-                next: (value) => {
-                  this.dataMidia = value;
-                  this.colorMidia = this.setColorMidia(this.dataMidia);
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService.noticiaPorVeiculo(request).subscribe({
-                next: (value) => {
-                  this.dataVeiculo = value;
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService.sentimentoPorCategoria(request).subscribe({
-                next: (value) => {
-                  this.dataSentimentoCategoria = value;
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService
-                .listarTabela(
+              this.requestsService
+                .listarTabelaCommon(
                   `1?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
@@ -428,115 +377,50 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     this.showchips();
     var request = this.criarStringRequest();
 
-    // Swal.fire({
-    //   background: '#ffffff00',
-    //   showConfirmButton: false,
-    //   didOpen: async () => {
-    //     Swal.showLoading();
-    //     try {
-    //       await Promise.all([
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .noticiaPorSentimento(request)
-    //             .subscribe({
-    //               next: (value) => {
-    //                 console.log('passou 1');
+    Swal.fire({
+      background: '#ffffff00',
+      showConfirmButton: false,
+      didOpen: async () => {
+        Swal.showLoading();
+        try {
+          await Promise.all([
+            new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaCommon(
+                  `1?page=1&per_page=${
+                    this.rowsPerPage
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
 
-    //                 this.dataSentimento = value;
-    //                 this.colorSentimento = this.setColorSentimento(
-    //                   this.dataSentimento
-    //                 );
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 console.log(' n passou 1');
-    //                 reject(true);
-    //               },
-    //             });
-    //         }),
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService.noticiaPorMidia(request).subscribe({
-    //             next: (value) => {
-    //               console.log('passou 2');
-    //               this.dataMidia = value;
-    //               this.colorMidia = this.setColorMidia(this.dataMidia);
-    //               resolve(true);
-    //             },
-    //             error: (error) => {
-    //               console.log(' n passou 2');
-    //               reject(true);
-    //             },
-    //           });
-    //         }),
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService.noticiaPorVeiculo(request).subscribe({
-    //             next: (value) => {
-    //               console.log('passou 3');
-    //               this.dataVeiculo = value;
-    //               console.log('resposta da api', value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.paginaAtual = 1;
+                    this.ultimaPagina = value._metadata.total_pages;
 
-    //               resolve(true);
-    //             },
-    //             error: (error) => {
-    //               console.log('n passou 3');
-    //               reject(true);
-    //             },
-    //           });
-    //         }),
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .sentimentoPorCategoria(request)
-    //             .subscribe({
-    //               next: (value) => {
-    //                 console.log('passou 4');
-    //                 this.dataSentimentoCategoria = value;
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 console.log('n passou 4');
-    //                 reject(true);
-    //               },
-    //             });
-    //         }),
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=1&per_page=${
-    //                 this.rowsPerPage
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            }),
+          ]);
 
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.paginaAtual = 1;
-    //                 this.ultimaPagina = value._metadata.total_pages;
-
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         }),
-    //       ]);
-
-    //       Swal.close();
-    //     } catch (error) {
-    //       console.log(error);
-    //       Swal.fire({
-    //         icon: 'error',
-    //         title: 'houve um erro ao carregar os filtros',
-    //         text: 'Por favor, tente novamente.',
-    //         confirmButtonColor: 'orange',
-    //       });
-    //     }
-    //   },
-    // });
-
-    this.gerarPDF();
+          Swal.close();
+        } catch (error) {
+          console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'houve um erro ao carregar os filtros',
+            text: 'Por favor, tente novamente.',
+            confirmButtonColor: 'orange',
+          });
+        }
+      },
+    });
   }
 
   async addFiltroSelect(event: any, nome: keyof filterSelected, id: any) {
@@ -765,237 +649,232 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   async handlePageEvent(event: PageEvent) {
     this.dataSource = new MatTableDataSource();
 
-    // if (event.pageSize != this.rowsPerPage) {
-    //   Swal.fire({
-    //     title: 'Carregando...',
+    if (event.pageSize != this.rowsPerPage) {
+      Swal.fire({
+        title: 'Carregando...',
 
-    //     timerProgressBar: true,
-    //     showConfirmButton: false,
-    //     allowOutsideClick: false,
-    //     didOpen: async () => {
-    //       Swal.showLoading();
-    //       try {
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=${this.paginaAtual}&per_page=${
-    //                 event.pageSize
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
-    //                 console.log(value);
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.rowsPerPage = event.pageSize;
-    //                 this.ultimaPagina = value._metadata.total_pages;
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         });
-    //         Swal.close();
-    //       } catch (error) {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'houve um erro ao carregar os filtros',
-    //           text: 'Por favor, tente novamente.',
-    //           confirmButtonColor: 'orange',
-    //         });
-    //         Swal.close();
-    //       }
-    //     },
-    //   });
-    // }
+        timerProgressBar: true,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaCommon(
+                  `1?page=${this.paginaAtual}&per_page=${
+                    event.pageSize
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
+                    console.log(value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.rowsPerPage = event.pageSize;
+                    this.ultimaPagina = value._metadata.total_pages;
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            });
+            Swal.close();
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'houve um erro ao carregar os filtros',
+              text: 'Por favor, tente novamente.',
+              confirmButtonColor: 'orange',
+            });
+            Swal.close();
+          }
+        },
+      });
+    }
 
-    // if (event.previousPageIndex == event.pageIndex - 1) {
-    //   Swal.fire({
-    //     title: 'Carregando...',
+    if (event.previousPageIndex == event.pageIndex - 1) {
+      Swal.fire({
+        title: 'Carregando...',
 
-    //     timerProgressBar: true,
-    //     showConfirmButton: false,
-    //     allowOutsideClick: false,
-    //     didOpen: async () => {
-    //       Swal.showLoading();
-    //       try {
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=${this.paginaAtual + 1}&per_page=${
-    //                 this.rowsPerPage
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
-    //                 console.log(value);
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.paginaAtual = this.paginaAtual + 1;
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         });
-    //         Swal.close();
-    //       } catch (error) {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'houve um erro ao carregar os filtros',
-    //           text: 'Por favor, tente novamente.',
-    //           confirmButtonColor: 'orange',
-    //         });
-    //         Swal.close();
-    //       }
-    //     },
-    //   });
-    // }
-    // else if (event.previousPageIndex == event.pageIndex + 1) {
-    //   Swal.fire({
-    //     title: 'Carregando...',
+        timerProgressBar: true,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaCommon(
+                  `1?page=${this.paginaAtual + 1}&per_page=${
+                    this.rowsPerPage
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
+                    console.log(value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.paginaAtual = this.paginaAtual + 1;
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            });
+            Swal.close();
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'houve um erro ao carregar os filtros',
+              text: 'Por favor, tente novamente.',
+              confirmButtonColor: 'orange',
+            });
+            Swal.close();
+          }
+        },
+      });
+    } else if (event.previousPageIndex == event.pageIndex + 1) {
+      Swal.fire({
+        title: 'Carregando...',
 
-    //     timerProgressBar: true,
-    //     showConfirmButton: false,
-    //     allowOutsideClick: false,
-    //     didOpen: async () => {
-    //       Swal.showLoading();
-    //       try {
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=${this.paginaAtual - 1}&per_page=${
-    //                 this.rowsPerPage
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
-    //                 console.log(value);
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.paginaAtual = this.paginaAtual - 1;
+        timerProgressBar: true,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaCommon(
+                  `1?page=${this.paginaAtual - 1}&per_page=${
+                    this.rowsPerPage
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
+                    console.log(value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.paginaAtual = this.paginaAtual - 1;
 
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         });
-    //         Swal.close();
-    //       } catch (error) {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'houve um erro ao carregar os filtros',
-    //           text: 'Por favor, tente novamente.',
-    //           confirmButtonColor: 'orange',
-    //         });
-    //         Swal.close();
-    //       }
-    //     },
-    //   });
-    // }
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            });
+            Swal.close();
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'houve um erro ao carregar os filtros',
+              text: 'Por favor, tente novamente.',
+              confirmButtonColor: 'orange',
+            });
+            Swal.close();
+          }
+        },
+      });
+    } else if (
+      event.previousPageIndex != undefined &&
+      event.previousPageIndex > event.pageIndex
+    ) {
+      Swal.fire({
+        title: 'Carregando...',
 
-    // else if (
-    //   event.previousPageIndex != undefined &&
-    //   event.previousPageIndex > event.pageIndex
-    // ) {
-    //   Swal.fire({
-    //     title: 'Carregando...',
+        timerProgressBar: true,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaCommon(
+                  `1?page=1&per_page=${
+                    this.rowsPerPage
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
+                    console.log(value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.paginaAtual = 1;
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            });
+            Swal.close();
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'houve um erro ao carregar os filtros',
+              text: 'Por favor, tente novamente.',
+              confirmButtonColor: 'orange',
+            });
+            Swal.close();
+          }
+        },
+      });
+    } else if (
+      event.previousPageIndex != undefined &&
+      event.previousPageIndex < event.pageIndex
+    ) {
+      Swal.fire({
+        background: '#ffffff00',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaCommon(
+                  `1?page=${this.ultimaPagina}&per_page=${
+                    this.rowsPerPage
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
+                    console.log(value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.paginaAtual = this.ultimaPagina;
+                    console.log('carregou a ultima pagina');
 
-    //     timerProgressBar: true,
-    //     showConfirmButton: false,
-    //     allowOutsideClick: false,
-    //     didOpen: async () => {
-    //       Swal.showLoading();
-    //       try {
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=1&per_page=${
-    //                 this.rowsPerPage
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
-    //                 console.log(value);
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.paginaAtual = 1;
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         });
-    //         Swal.close();
-    //       } catch (error) {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'houve um erro ao carregar os filtros',
-    //           text: 'Por favor, tente novamente.',
-    //           confirmButtonColor: 'orange',
-    //         });
-    //         Swal.close();
-    //       }
-    //     },
-    //   });
-    // }
-
-    // else if (
-    //   event.previousPageIndex != undefined &&
-    //   event.previousPageIndex < event.pageIndex
-    // ) {
-    //   Swal.fire({
-    //     background: '#ffffff00',
-    //     showConfirmButton: false,
-    //     allowOutsideClick: false,
-    //     didOpen: async () => {
-    //       Swal.showLoading();
-    //       try {
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=${this.ultimaPagina}&per_page=${
-    //                 this.rowsPerPage
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
-    //                 console.log(value);
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.paginaAtual = this.ultimaPagina;
-    //                 console.log('carregou a ultima pagina');
-
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         });
-    //         Swal.close();
-    //       } catch (error) {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'houve um erro ao carregar os filtros',
-    //           text: 'Por favor, tente novamente.',
-    //           confirmButtonColor: 'orange',
-    //         });
-    //         Swal.close();
-    //       }
-    //     },
-    //   });
-    // }
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            });
+            Swal.close();
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'houve um erro ao carregar os filtros',
+              text: 'Por favor, tente novamente.',
+              confirmButtonColor: 'orange',
+            });
+            Swal.close();
+          }
+        },
+      });
+    }
 
     this.pageEvent = event;
 

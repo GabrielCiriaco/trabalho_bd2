@@ -28,14 +28,16 @@ import { ClasEtariaService } from 'src/app/core/services/clas-etaria.service';
 import { APIReturns } from 'src/app/core/model/APIReturns';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { DoughnutChartComponent } from 'src/app/shared/echarts/doughnut-chart/doughnut-chart.component';
-import { DataAdminService } from 'src/app/core/services/data-admin.service';
+import { RequestsService } from 'src/app/core/services/requests-data.service';
 import { ProprietarioEspacoService } from 'src/app/core/services/proprietario-espaco.service';
 import { ProprietarioEventoService } from 'src/app/core/services/proprietario-evento.service';
 import { ProprietarioProjetoService } from 'src/app/core/services/proprietario-projeto.service';
+import { ProjetoService } from 'src/app/core/services/projeto.service';
 
 interface filterSelected {
   evento: string;
   espaco: string;
+  projeto: string;
   clasEtaria: string;
   donoEspaco: string;
   donoEvento: string;
@@ -63,6 +65,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
   // data dos gráficos
   dataEvento = [];
   dataEspaco = [];
+  dataProjeto = [];
   dataClasEtaria = [];
   dataDonoEspaco = [];
   dataDonoEvento = [];
@@ -94,10 +97,11 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
   filterForm = new FormGroup({
     eventos: new FormControl('', [this.validateWordEventos()]),
     espacos: new FormControl('', [this.validateWordEspacos()]),
+    projetos: new FormControl('', [this.validateWordProjetos()]),
     clasEtarias: new FormControl('', [this.validateWordClasEtarias()]),
-    donoEspacos: new FormControl('', [this.validateWordEspacos()]),
-    donoEventos: new FormControl('', [this.validateWordEventos()]),
-    donoProjetos: new FormControl('', [this.validateWordEventos()]),
+    donoEspacos: new FormControl('', [this.validateWordDonoEspacos()]),
+    donoEventos: new FormControl('', [this.validateWordDonoEventos()]),
+    donoProjetos: new FormControl('', [this.validateWordDonoProjetos()]),
 
     dataInicial: new FormControl<Date | null>(this.ninetyDaysAgo),
     dataFinal: new FormControl<Date | null>(this.todayDate),
@@ -107,6 +111,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
   eventos: Array<APIReturns> = [];
   espacos: Array<APIReturns> = [];
+  projetos: Array<APIReturns> = [];
   clasesEtarias: Array<APIReturns> = [];
   donoEspacos: Array<APIReturns> = [];
   donoEventos: Array<APIReturns> = [];
@@ -115,6 +120,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
   // variaveis para filtragem de filtros para os filtros ---------------------
   filteredOptionsEventos?: Observable<APIReturns[]>;
   filteredOptionsEspacos?: Observable<APIReturns[]>;
+  filteredOptionsProjetos?: Observable<APIReturns[]>;
   filteredOptionsClasesEtarias?: Observable<APIReturns[]>;
   filteredOptionsDonoEspacos?: Observable<APIReturns[]>;
   filteredOptionsDonoEventos?: Observable<APIReturns[]>;
@@ -122,6 +128,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
   @ViewChild('completeEvento') completeEvento: MatAutocomplete = <any>{};
   @ViewChild('completeEspaco') completeEspaco: MatAutocomplete = <any>{};
+  @ViewChild('completeProjeto') completeProjeto: MatAutocomplete = <any>{};
   @ViewChild('completeDonoEspaco') completeDonoEspaco: MatAutocomplete = <
     any
   >{};
@@ -165,12 +172,13 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
   constructor(
     private eventoService: EventoService,
     private espacoService: EspacoService,
+    private projetoService: ProjetoService,
     private clasEtariaService: ClasEtariaService,
     private proprietarioEspacoService: ProprietarioEspacoService,
     private proprietarioEventoService: ProprietarioEventoService,
     private proprietarioProjetoService: ProprietarioProjetoService,
 
-    private dataAdminService: DataAdminService
+    private requestsService: RequestsService
   ) {
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(this.dataTabela);
@@ -199,62 +207,15 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
           await Promise.all([
             this.listar_eventos(),
             this.listar_espacos(),
+            this.listar_projetos(),
             this.listar_clasEtarias(),
             this.listar_donoEspacos(),
             this.listar_donoEventos(),
             this.listar_donoProjetos(),
 
             new Promise((resolve, reject) => {
-              this.dataAdminService.noticiaPorSentimento(request).subscribe({
-                next: (value) => {
-                  this.dataSentimento = value;
-                  this.colorSentimento = this.setColorSentimento(
-                    this.dataSentimento
-                  );
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService.noticiaPorMidia(request).subscribe({
-                next: (value) => {
-                  this.dataMidia = value;
-                  this.colorMidia = this.setColorMidia(this.dataMidia);
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService.noticiaPorVeiculo(request).subscribe({
-                next: (value) => {
-                  this.dataVeiculo = value;
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService.sentimentoPorCategoria(request).subscribe({
-                next: (value) => {
-                  this.dataSentimentoCategoria = value;
-                  resolve(true);
-                },
-                error: (error) => {
-                  reject(true);
-                },
-              });
-            }),
-            new Promise((resolve, reject) => {
-              this.dataAdminService
-                .listarTabela(
+              this.requestsService
+                .listarTabelaProductor(
                   `1?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
@@ -323,6 +284,13 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       this.filterForm.get('espacos')?.errors?.['invalidWord'] != true
     )
       this.chipShow.push(this.filterForm.controls.espacos.value);
+
+    if (
+      this.filterForm.controls.projetos.value != '' &&
+      this.filterForm.controls.projetos.value != null &&
+      this.filterForm.get('projeto')?.errors?.['invalidWord'] != true
+    )
+      this.chipShow.push(this.filterForm.controls.projetos.value);
 
     if (
       this.filterForm.controls.clasEtarias.value != '' &&
@@ -402,6 +370,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     if (
       !this.filterForm.get('eventos')?.errors?.['invalidWord'] &&
       !this.filterForm.get('espacos')?.errors?.['invalidWord'] &&
+      !this.filterForm.get('projetos')?.errors?.['invalidWord'] &&
       !this.filterForm.get('clasEtarias')?.errors?.['invalidWord'] &&
       !this.filterForm.get('donoEspacos')?.errors?.['invalidWord'] &&
       !this.filterForm.get('donoEventos')?.errors?.['invalidWord'] &&
@@ -419,6 +388,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
         this.filterForm.controls.eventos.value == null) &&
       (this.filterForm.controls.espacos.value == '' ||
         this.filterForm.controls.espacos.value == null) &&
+      (this.filterForm.controls.projetos.value == '' ||
+        this.filterForm.controls.projetos.value == null) &&
       (this.filterForm.controls.clasEtarias.value == '' ||
         this.filterForm.controls.clasEtarias.value == null) &&
       (this.filterForm.controls.donoEspacos.value == '' ||
@@ -444,6 +415,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
     this.filterForm.controls.eventos.setValue(null);
     this.filterForm.controls.espacos.setValue(null);
+    this.filterForm.controls.projetos.setValue(null);
     this.filterForm.controls.clasEtarias.setValue(null);
     this.filterForm.controls.donoEspacos.setValue(null);
     this.filterForm.controls.donoEventos.setValue(null);
@@ -459,6 +431,9 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       element.deselect();
     });
     this.completeEspaco.options.forEach((element) => {
+      element.deselect();
+    });
+    this.completeProjeto.options.forEach((element) => {
       element.deselect();
     });
     this.completeClasEtaria.options.forEach((element) => {
@@ -484,6 +459,9 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
     if (this.filterSelected.espaco != undefined)
       request = request.concat(`id_espaco=${this.filterSelected.espaco}&`);
+
+    if (this.filterSelected.projeto != undefined)
+      request = request.concat(`id_projeto=${this.filterSelected.projeto}&`);
 
     if (this.filterSelected.clasEtaria != undefined)
       request = request.concat(
@@ -523,113 +501,50 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     this.showchips();
     var request = this.criarStringRequest();
 
-    // Swal.fire({
-    //   background: '#ffffff00',
-    //   showConfirmButton: false,
-    //   didOpen: async () => {
-    //     Swal.showLoading();
-    //     try {
-    //       await Promise.all([
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .noticiaPorSentimento(request)
-    //             .subscribe({
-    //               next: (value) => {
-    //                 console.log('passou 1');
+    Swal.fire({
+      background: '#ffffff00',
+      showConfirmButton: false,
+      didOpen: async () => {
+        Swal.showLoading();
+        try {
+          await Promise.all([
+            new Promise((resolve, reject) => {
+              this.requestsService
+                .listarTabelaProductor(
+                  `1?page=1&per_page=${
+                    this.rowsPerPage
+                  }&${this.criarStringRequest()}`
+                )
+                .subscribe({
+                  next: (value) => {
+                    this.dataTabela = value.records;
 
-    //                 this.dataSentimento = value;
-    //                 this.colorSentimento = this.setColorSentimento(
-    //                   this.dataSentimento
-    //                 );
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 console.log(' n passou 1');
-    //                 reject(true);
-    //               },
-    //             });
-    //         }),
-    //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService.noticiaPorMidia(request).subscribe({
-    //             next: (value) => {
-    //               console.log('passou 2');
-    //               this.dataMidia = value;
-    //               this.colorMidia = this.setColorMidia(this.dataMidia);
-    //               resolve(true);
-    //             },
-    //             error: (error) => {
-    //               console.log(' n passou 2');
-    //               reject(true);
-    //             },
-    //           });
-    //         }),
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService.noticiaPorVeiculo(request).subscribe({
-    //             next: (value) => {
-    //               console.log('passou 3');
-    //               this.dataVeiculo = value;
-    //               console.log('resposta da api', value);
+                    this.length = value._metadata.total_count;
+                    this.dataSource = new MatTableDataSource(this.dataTabela);
+                    this.paginaAtual = 1;
+                    this.ultimaPagina = value._metadata.total_pages;
 
-    //               resolve(true);
-    //             },
-    //             error: (error) => {
-    //               console.log('n passou 3');
-    //               reject(true);
-    //             },
-    //           });
-    //         }),
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .sentimentoPorCategoria(request)
-    //             .subscribe({
-    //               next: (value) => {
-    //                 console.log('passou 4');
-    //                 this.dataSentimentoCategoria = value;
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 console.log('n passou 4');
-    //                 reject(true);
-    //               },
-    //             });
-    //         }),
-    //         new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
-    //               `1?page=1&per_page=${
-    //                 this.rowsPerPage
-    //               }&${this.criarStringRequest()}`
-    //             )
-    //             .subscribe({
-    //               next: (value) => {
-    //                 this.dataTabela = value.records;
+                    resolve(true);
+                  },
+                  error: (error) => {
+                    reject(true);
+                  },
+                });
+            }),
+          ]);
 
-    //                 this.length = value._metadata.total_count;
-    //                 this.dataSource = new MatTableDataSource(this.dataTabela);
-    //                 this.paginaAtual = 1;
-    //                 this.ultimaPagina = value._metadata.total_pages;
-
-    //                 resolve(true);
-    //               },
-    //               error: (error) => {
-    //                 reject(true);
-    //               },
-    //             });
-    //         }),
-    //       ]);
-
-    //       Swal.close();
-    //     } catch (error) {
-    //       console.log(error);
-    //       Swal.fire({
-    //         icon: 'error',
-    //         title: 'houve um erro ao carregar os filtros',
-    //         text: 'Por favor, tente novamente.',
-    //         confirmButtonColor: 'orange',
-    //       });
-    //     }
-    //   },
-    // });
+          Swal.close();
+        } catch (error) {
+          console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'houve um erro ao carregar os filtros',
+            text: 'Por favor, tente novamente.',
+            confirmButtonColor: 'orange',
+          });
+        }
+      },
+    });
   }
 
   async addFiltroSelect(event: any, nome: keyof filterSelected, id: any) {
@@ -749,6 +664,54 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
           });
 
           this.valueChangesEspaco();
+          resolve(true);
+        },
+      });
+    });
+  }
+
+  // --------------------------------- projeto ----------------------------------------------
+
+  validateWordProjetos(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null; // A palavra é válida
+      }
+      const enteredWord = control.value;
+
+      if (this.projetos.map((projeto) => projeto.name).includes(enteredWord)) {
+        return null; // A palavra é válida
+      } else {
+        return { invalidWord: true }; // A palavra é inválida
+      }
+    };
+  }
+
+  valueChangesProjeto() {
+    this.filteredOptionsProjetos =
+      this.filterForm.controls.projetos.valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filterProjeto(value as string))
+      );
+  }
+
+  filterProjeto(value: string): APIReturns[] {
+    if (value == null) value = '';
+    const filterValue = value.toLowerCase();
+    return this.projetos.filter((option) =>
+      option.name.toLowerCase().includes(filterValue)
+    );
+  }
+
+  async listar_projetos() {
+    return new Promise((resolve, reject) => {
+      this.projetoService.listarProjetosProductor().subscribe({
+        next: (value) => {
+          value.forEach((element) => {
+            this.projetos.push(element);
+          });
+
+          this.valueChangesProjeto();
           resolve(true);
         },
       });
@@ -1025,8 +988,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //       Swal.showLoading();
     //       try {
     //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
+    //           this.requestsService
+    //             .listarTabelaProductor(
     //               `1?page=${this.paginaAtual}&per_page=${
     //                 event.pageSize
     //               }&${this.criarStringRequest()}`
@@ -1071,8 +1034,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //       Swal.showLoading();
     //       try {
     //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
+    //           this.requestsService
+    //             .listarTabelaProductor(
     //               `1?page=${this.paginaAtual + 1}&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
@@ -1115,8 +1078,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //       Swal.showLoading();
     //       try {
     //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
+    //           this.requestsService
+    //             .listarTabelaProductor(
     //               `1?page=${this.paginaAtual - 1}&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
@@ -1164,8 +1127,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //       Swal.showLoading();
     //       try {
     //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
+    //           this.requestsService
+    //             .listarTabelaProductor(
     //               `1?page=1&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
@@ -1210,8 +1173,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //       Swal.showLoading();
     //       try {
     //         await new Promise((resolve, reject) => {
-    //           this.dataAdminService
-    //             .listarTabela(
+    //           this.requestsService
+    //             .listarTabelaProductor(
     //               `1?page=${this.ultimaPagina}&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`

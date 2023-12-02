@@ -14,7 +14,7 @@ export class ProprietarioEspacoService {
 
   listarProprietarioEspaco(): Observable<APIReturns[]> {
     return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/produtor/space/owner/names`
+      `${this.apiUrl}/produtor/spaces/owner/names`
     );
   }
 }

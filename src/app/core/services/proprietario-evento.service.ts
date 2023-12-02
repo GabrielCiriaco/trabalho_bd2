@@ -14,7 +14,7 @@ export class ProprietarioEventoService {
 
   listarProprietarioEvento(): Observable<APIReturns[]> {
     return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/produtor/event/owner/names`
+      `${this.apiUrl}/produtor/events/owner/names`
     );
   }
 }

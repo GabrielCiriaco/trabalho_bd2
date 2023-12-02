@@ -139,49 +139,49 @@
             <table mat-table [dataSource]="dataSource" matSort class="example-container">
 
               <!-- ID Column -->
-              <ng-container matColumnDef="id">
+              <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
                 <td mat-cell *matCellDef="let row"> {{row.id}} </td>
               </ng-container>
 
               <!-- datapubli Column -->
-              <ng-container matColumnDef="datapubli">
+              <ng-container matColumnDef="description">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
                 <td mat-cell *matCellDef="let row"> {{row.datapubli}} </td>
               </ng-container>
 
               <!-- grupo Column -->
-              <ng-container matColumnDef="grupo">
+              <ng-container matColumnDef="classEtaria">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Grupo</th>
                 <td mat-cell *matCellDef="let row"> {{row.grupo}} </td>
               </ng-container>
 
               <!-- empresa Column -->
-              <ng-container matColumnDef="empresa">
+              <ng-container matColumnDef="data">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
                 <td mat-cell *matCellDef="let row"> {{row.empresa}} </td>
               </ng-container>
 
               <!-- midia Column -->
-              <ng-container matColumnDef="midia">
+              <ng-container matColumnDef="horaInicio">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Mídia</th>
                 <td mat-cell *matCellDef="let row"> {{row.midia}} </td>
               </ng-container>
 
               <!-- veiculo Column -->
-              <ng-container matColumnDef="veiculo">
+              <ng-container matColumnDef="horaFim">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Veículo</th>
                 <td mat-cell *matCellDef="let row"> {{row.veiculo}} </td>
               </ng-container>
 
               <!-- programa Column -->
-              <ng-container matColumnDef="programa">
+              <ng-container matColumnDef="space">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Programa</th>
                 <td mat-cell *matCellDef="let row"> {{row.programa}} </td>
               </ng-container>
 
               <!-- categoria Column -->
-              <ng-container matColumnDef="categoria">
+              <ng-container matColumnDef="location">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
                 <td mat-cell *matCellDef="let row"> {{row.categoria}} </td>
               </ng-container>
