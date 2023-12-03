@@ -29,6 +29,7 @@ export class RequestsService {
       {
         headers: {
           'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
         },
       }
     );

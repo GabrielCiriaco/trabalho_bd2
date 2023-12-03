@@ -25,6 +25,7 @@ export class ClasEtariaService {
     return this.http.get<any>(`${this.apiUrl}/productor/clas-etaria`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }
@@ -33,6 +34,7 @@ export class ClasEtariaService {
     return this.http.get<any>(`${this.apiUrl}/admin/clas-etaria`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }
