@@ -13,8 +13,12 @@ export class ProprietarioProjetoService {
   constructor(private http: HttpClient) {}
 
   listarProprietarioProjeto(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/productor/project/owner/names`
+    return this.http.get<any>(
+      `${this.apiUrl}/productor/project/owner/names`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     );
   }
 }

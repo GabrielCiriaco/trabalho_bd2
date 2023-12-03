@@ -13,8 +13,10 @@ export class ProprietarioEventoService {
   constructor(private http: HttpClient) {}
 
   listarProprietarioEvento(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/produtor/events/owner/names`
-    );
+    return this.http.get<any>(`${this.apiUrl}/produtor/events/owner/names`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 }

@@ -13,14 +13,26 @@ export class ClasEtariaService {
   constructor(private http: HttpClient) {}
 
   listarClasEtariasCommon(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/clas-etaria`);
+    return this.http.get<any>(`${this.apiUrl}/common/clas-etaria`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 
   listarClasEtariasProductor(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/clas-etaria`);
+    return this.http.get<any>(`${this.apiUrl}/productor/clas-etaria`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 
   listarClasEtariasAdm(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/admin/clas-etaria`);
+    return this.http.get<any>(`${this.apiUrl}/admin/clas-etaria`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 }

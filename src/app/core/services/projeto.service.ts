@@ -13,12 +13,20 @@ export class ProjetoService {
   constructor(private http: HttpClient) {}
 
   listarProjetosProductor(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/productor/project/names`
+    return this.http.get<any>(
+      `${this.apiUrl}/productor/project/names`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     );
   }
 
   listarProjetosAdm(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/admin/events`);
+    return this.http.get<any>(`${this.apiUrl}/admin/events`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 }

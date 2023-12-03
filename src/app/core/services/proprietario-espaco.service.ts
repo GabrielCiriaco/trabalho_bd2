@@ -13,8 +13,12 @@ export class ProprietarioEspacoService {
   constructor(private http: HttpClient) {}
 
   listarProprietarioEspaco(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(
-      `${this.apiUrl}/produtor/spaces/owner/names`
+    return this.http.get<any>(
+      `${this.apiUrl}/produtor/spaces/owner/names`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     );
   }
 }

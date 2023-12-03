@@ -13,14 +13,26 @@ export class EventoService {
   constructor(private http: HttpClient) {}
 
   listarEventosCommon(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/events/names`);
+    return this.http.get<any>(`${this.apiUrl}/common/events/names`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 
   listarEventosProductor(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/events/names`);
+    return this.http.get<any>(`${this.apiUrl}/productor/events/names`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 
   listarEventosAdm(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/admin/events`);
+    return this.http.get<any>(`${this.apiUrl}/admin/events`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 }
