@@ -13,14 +13,26 @@ export class EspacoService {
   constructor(private http: HttpClient) {}
 
   listarEspacosCommon(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/common/spaces/names`);
+    return this.http.get<any>(`${this.apiUrl}/common/spaces/names`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 
   listarEspacosProductor(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/productor/spaces/names`);
+    return this.http.get<any>(`${this.apiUrl}/productor/spaces/names`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 
   listarEspacosAdm(): Observable<APIReturns[]> {
-    return this.http.get<APIReturns[]>(`${this.apiUrl}/admin/space`);
+    return this.http.get<any>(`${this.apiUrl}/admin/space`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
   }
 }

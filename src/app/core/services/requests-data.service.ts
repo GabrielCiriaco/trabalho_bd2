@@ -14,7 +14,6 @@ export class RequestsService {
   listarTabelaCommon(filterRequest?: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/common/events${filterRequest}`, {
       headers: {
-        authorization: localStorage.getItem('token') ?? '',
         'Access-Control-Allow-Origin': '*',
       },
     });
@@ -25,7 +24,6 @@ export class RequestsService {
       `${this.apiUrl}/productor/events${filterRequest}`,
       {
         headers: {
-          authorization: localStorage.getItem('token') ?? '',
           'Access-Control-Allow-Origin': '*',
         },
       }
