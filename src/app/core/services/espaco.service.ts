@@ -16,6 +16,7 @@ export class EspacoService {
     return this.http.get<any>(`${this.apiUrl}/common/spaces/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }

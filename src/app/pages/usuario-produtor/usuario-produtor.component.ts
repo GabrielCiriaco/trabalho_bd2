@@ -511,7 +511,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=1&per_page=${
+                  `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )

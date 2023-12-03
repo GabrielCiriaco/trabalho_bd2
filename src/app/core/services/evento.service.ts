@@ -16,6 +16,7 @@ export class EventoService {
     return this.http.get<any>(`${this.apiUrl}/common/events/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }

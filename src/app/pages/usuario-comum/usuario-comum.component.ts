@@ -109,14 +109,14 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   >{};
 
   displayedColumns: string[] = [
-    'name',
-    'description',
-    'classEtaria',
-    'data',
-    'horaInicio',
-    'horaFim',
-    'space',
+    'classificacao_etaria',
+    'ends_at',
+    'event_name',
     'location',
+    'short_description',
+    'space_name',
+    'starts_at',
+    'starts_on',
   ];
   dataSource: MatTableDataSource<any>;
 
@@ -166,7 +166,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=1&per_page=${
+                  `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -176,6 +176,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
                     this.length = value._metadata.total_count;
                     this.dataSource = new MatTableDataSource(this.dataTabela);
                     this.ultimaPagina = value._metadata.total_pages;
+                    console.log(this.dataTabela);
                     resolve(true);
                   },
                   error: (error) => {
@@ -538,6 +539,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
           value.forEach((element) => {
             this.espacos.push(element);
           });
+          console.log(this.espacos);
 
           this.valueChangesEspaco();
           resolve(true);
@@ -590,6 +592,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
           value.forEach((element) => {
             this.clasesEtarias.push(element);
           });
+          console.log(this.clasesEtarias);
 
           this.valueChangesClasEtaria();
           resolve(true);

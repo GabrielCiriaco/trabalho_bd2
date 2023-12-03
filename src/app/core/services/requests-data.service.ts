@@ -12,16 +12,20 @@ export class RequestsService {
   constructor(private http: HttpClient) {}
 
   listarTabelaCommon(filterRequest?: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/common/events${filterRequest}`, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    return this.http.get<any>(
+      `${this.apiUrl}/common/events/paginated${filterRequest}`,
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
+        },
+      }
+    );
   }
 
   listarTabelaProductor(filterRequest?: string): Observable<any> {
     return this.http.get<any>(
-      `${this.apiUrl}/productor/events${filterRequest}`,
+      `${this.apiUrl}/productor/events/paginated${filterRequest}`,
       {
         headers: {
           'Access-Control-Allow-Origin': '*',
