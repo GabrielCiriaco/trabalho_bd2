@@ -216,7 +216,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=1&per_page=${
+                  `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -863,6 +863,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.proprietarioEventoService.listarProprietarioEvento().subscribe({
         next: (value) => {
+          console.log(value);
+
           value.forEach((element) => {
             this.donoEventos.push(element);
           });
@@ -990,7 +992,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //         await new Promise((resolve, reject) => {
     //           this.requestsService
     //             .listarTabelaProductor(
-    //               `1?page=${this.paginaAtual}&per_page=${
+    //               `?page=${this.paginaAtual}&per_page=${
     //                 event.pageSize
     //               }&${this.criarStringRequest()}`
     //             )
@@ -1036,7 +1038,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //         await new Promise((resolve, reject) => {
     //           this.requestsService
     //             .listarTabelaProductor(
-    //               `1?page=${this.paginaAtual + 1}&per_page=${
+    //               `?page=${this.paginaAtual + 1}&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
     //             )
@@ -1080,7 +1082,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //         await new Promise((resolve, reject) => {
     //           this.requestsService
     //             .listarTabelaProductor(
-    //               `1?page=${this.paginaAtual - 1}&per_page=${
+    //               `page=${this.paginaAtual - 1}&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
     //             )
@@ -1129,7 +1131,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //         await new Promise((resolve, reject) => {
     //           this.requestsService
     //             .listarTabelaProductor(
-    //               `1?page=1&per_page=${
+    //               `?page=1&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
     //             )
@@ -1175,7 +1177,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     //         await new Promise((resolve, reject) => {
     //           this.requestsService
     //             .listarTabelaProductor(
-    //               `1?page=${this.ultimaPagina}&per_page=${
+    //               `?page=${this.ultimaPagina}&per_page=${
     //                 this.rowsPerPage
     //               }&${this.criarStringRequest()}`
     //             )

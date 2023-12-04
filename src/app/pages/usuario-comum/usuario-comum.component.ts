@@ -388,7 +388,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=1&per_page=${
+                  `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -665,7 +665,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=${this.paginaAtual}&per_page=${
+                  `?page=${this.paginaAtual}&per_page=${
                     event.pageSize
                   }&${this.criarStringRequest()}`
                 )
@@ -711,7 +711,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=${this.paginaAtual + 1}&per_page=${
+                  `?page=${this.paginaAtual + 1}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -754,7 +754,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=${this.paginaAtual - 1}&per_page=${
+                  `?page=${this.paginaAtual - 1}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -801,7 +801,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=1&per_page=${
+                  `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -845,7 +845,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `1?page=${this.ultimaPagina}&per_page=${
+                  `?page=${this.ultimaPagina}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
