@@ -17,15 +17,17 @@ export class ProjetoService {
       `${this.apiUrl}/productor/project/names`, {
         headers: {
           'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
         },
       }
     );
   }
 
   listarProjetosAdm(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/admin/events`, {
+    return this.http.get<any>(`${this.apiUrl}/admin/projects`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }

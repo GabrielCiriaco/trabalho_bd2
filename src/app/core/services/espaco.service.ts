@@ -25,6 +25,7 @@ export class EspacoService {
     return this.http.get<any>(`${this.apiUrl}/productor/spaces/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }
@@ -33,6 +34,7 @@ export class EspacoService {
     return this.http.get<any>(`${this.apiUrl}/admin/space`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }

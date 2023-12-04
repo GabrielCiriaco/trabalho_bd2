@@ -17,6 +17,7 @@ export class ProprietarioProjetoService {
       `${this.apiUrl}/productor/project/owner/names`, {
         headers: {
           'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
         },
       }
     );

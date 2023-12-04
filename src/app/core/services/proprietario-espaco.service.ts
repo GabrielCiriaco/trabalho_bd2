@@ -14,9 +14,10 @@ export class ProprietarioEspacoService {
 
   listarProprietarioEspaco(): Observable<APIReturns[]> {
     return this.http.get<any>(
-      `${this.apiUrl}/produtor/spaces/owner/names`, {
+      `${this.apiUrl}/productor/spaces/owner/names`, {
         headers: {
           'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
         },
       }
     );

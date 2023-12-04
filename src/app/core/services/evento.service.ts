@@ -25,6 +25,7 @@ export class EventoService {
     return this.http.get<any>(`${this.apiUrl}/productor/events/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }
@@ -33,6 +34,7 @@ export class EventoService {
     return this.http.get<any>(`${this.apiUrl}/admin/events`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
       },
     });
   }
