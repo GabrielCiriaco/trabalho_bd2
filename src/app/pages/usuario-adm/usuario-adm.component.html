@@ -32,7 +32,7 @@
               formControlName="eventos" [matAutocomplete]="completeEvento">
             <mat-error *ngIf="filterForm.get('eventos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeEvento="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsEventos | async"
+              <mat-option *ngFor="let option of eventos"
                 (onSelectionChange)="addFiltroSelect($event,'evento', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -51,7 +51,7 @@
               formControlName="espacos" [matAutocomplete]="completeEspaco">
             <mat-error *ngIf="filterForm.get('espacos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeEspaco="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsEspacos | async"
+              <mat-option *ngFor="let option of espacos"
                 (onSelectionChange)="addFiltroSelect($event,'espaco', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -67,11 +67,11 @@
           <mat-form-field class="form-field" appearance="outline">
 
             <mat-label>Projeto</mat-label>
-            <input type="text" placeholder="Projeto" (blur)="addFiltroInput('projetos')" matInput formControlName="projetos"
-              [matAutocomplete]="completeProjeto">
+            <input type="text" placeholder="Projeto" (blur)="addFiltroInput('projetos')" matInput
+              formControlName="projetos" [matAutocomplete]="completeProjeto">
             <mat-error *ngIf="filterForm.get('projetos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeProjeto="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsProjetos | async"
+              <mat-option *ngFor="let option of projetos"
                 (onSelectionChange)="addFiltroSelect($event,'projeto', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -90,7 +90,7 @@
               formControlName="clasEtarias" [matAutocomplete]="completeClassEtaria">
             <mat-error *ngIf="filterForm.get('clasEtarias')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeClassEtaria="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsClasesEtarias | async"
+              <mat-option *ngFor="let option of clasesEtarias"
                 (onSelectionChange)="addFiltroSelect($event,'clasEtaria', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -110,7 +110,7 @@
               formControlName="donoEspacos" [matAutocomplete]="completeDonoEspaco">
             <mat-error *ngIf="filterForm.get('donoEspacos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeDonoEspaco="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsDonoEspacos | async"
+              <mat-option *ngFor="let option of donoEspacos"
                 (onSelectionChange)="addFiltroSelect($event,'donoEspaco', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -129,7 +129,7 @@
               formControlName="donoEventos" [matAutocomplete]="completeDonoEvento">
             <mat-error *ngIf="filterForm.get('donoEventos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeDonoEvento="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsDonoEventos | async"
+              <mat-option *ngFor="let option of donoEventos"
                 (onSelectionChange)="addFiltroSelect($event,'donoEvento', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -148,7 +148,7 @@
               formControlName="donoProjetos" [matAutocomplete]="completeDonoProjeto">
             <mat-error *ngIf="filterForm.get('donoProjetos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeDonoProjeto="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsDonoProjetos | async"
+              <mat-option *ngFor="let option of donoProjetos"
                 (onSelectionChange)="addFiltroSelect($event,'donoProjeto', option.name)" [value]="option.name">
                 {{option.name}}
               </mat-option>
@@ -156,6 +156,9 @@
 
           </mat-form-field>
         </mat-grid-tile>
+
+
+
 
         <!-- Filtro de data ------------------------------------------------------------------------ -->
         <mat-grid-tile>
@@ -179,11 +182,222 @@
           </mat-form-field>
         </mat-grid-tile>
 
-
-
       </mat-grid-list>
 
     </form>
+
+    <section>
+      <section>
+        <mat-checkbox [checked]="TabelaAgents" value="Agents" (change)="SelectAgents($event.checked)">
+          Tabela Agents
+        </mat-checkbox>
+      </section>
+
+      <section>
+        <mat-checkbox [(ngModel)]="AgentsId" [disabled]="true">
+          Id
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsName" [disabled]="!TabelaAgents">
+          Name
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsDescription" [disabled]="!TabelaAgents">
+          Description
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsCreateTSP" [disabled]="true">
+          Create TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsUpdateTSP" [disabled]="true">
+          Update TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsParent" [disabled]="true">
+          Parent
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsTerms" [disabled]="true">
+          Terms
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsChildren" [disabled]="true">
+          Children
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsSpaces" [disabled]="true">
+          Spaces
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsEvents" [disabled]="!TabelaAgents">
+          Events
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="AgentsProjects" [disabled]="true">
+          Projects
+        </mat-checkbox>
+      </section>
+    </section>
+
+    <section>
+      <section>
+        <mat-checkbox [checked]="TabelaEvents" value="Events" (change)="SelectEvents($event.checked)">
+          Tabela Events
+        </mat-checkbox>
+      </section>
+
+      <section>
+        <mat-checkbox [(ngModel)]="EventsId" [disabled]="true">
+          Id
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsName" [disabled]="!TabelaEvents">
+          Name
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsDescription" [disabled]="!TabelaEvents">
+          Description
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsCreateTSP" [disabled]="true">
+          Create TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsUpdateTSP" [disabled]="true">
+          Update TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsClasEtaria" [disabled]="!TabelaEvents">
+          Class Etária
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsOwner" [disabled]="true">
+          Owner
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventsProject" [disabled]="true">
+          Project
+        </mat-checkbox>
+      </section>
+    </section>
+
+    <section>
+      <section>
+        <mat-checkbox [checked]="TabelaSpaces" value="Spaces" (change)="SelectSpaces($event.checked)">
+          Tabela Spaces
+        </mat-checkbox>
+      </section>
+
+      <section>
+        <mat-checkbox [(ngModel)]="SpacesId" [disabled]="true">
+          Id
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesLocation" [disabled]="!TabelaSpaces">
+          Location
+        </mat-checkbox>
+
+        <mat-checkbox [(ngModel)]="SpacesName" [disabled]="!TabelaSpaces">
+          Name
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesDescription" [disabled]="!TabelaSpaces">
+          Description
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesCreateTSP" [disabled]="true">
+          Create TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesUpdateTSP" [disabled]="true">
+          Update TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesEventOcur" [disabled]="true">
+          Event Ocur
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesHorarios" [disabled]="true">
+          Horarios
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesTelefone" [disabled]="true">
+          Telefone
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesEmail" [disabled]="true">
+          Email
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesChildren" [disabled]="true">
+          Children
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesTerms" [disabled]="true">
+          SpacesTerms
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesParent" [disabled]="true">
+          PareSpacesParent
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="SpacesOwner" [disabled]="true">
+          Owner
+        </mat-checkbox>
+      </section>
+    </section>
+
+    <section>
+      <section>
+        <mat-checkbox [checked]="TabelaEventOcur" value="Spaces" (change)="SelectEventOcur($event.checked)">
+          Tabela Event Ocurrence
+        </mat-checkbox>
+      </section>
+
+      <section>
+        <mat-checkbox [(ngModel)]="EventOcurId" [disabled]="true">
+          Id
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurStartsOn" [disabled]="true">
+          StartsOn
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurStartsAt" [disabled]="!TabelaEventOcur">
+          StartsAt
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurEndsAt" [disabled]="!TabelaEventOcur">
+          EndsAt
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurFrequency" [disabled]="true">
+          Frequency
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurSeparation" [disabled]="true">
+          Separation
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurEvent" [disabled]="true">
+          Event
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="EventOcurSpace" [disabled]="true">
+          Space
+        </mat-checkbox>
+
+      </section>
+    </section>
+
+    <section>
+      <section>
+        <mat-checkbox [checked]="TabelaProject" [disabled]="true" value="Spaces"
+          (change)="SelectProject($event.checked)">
+          Tabela Project
+        </mat-checkbox>
+      </section>
+
+      <section>
+        <mat-checkbox [(ngModel)]="ProjectId" [disabled]="!TabelaProject">
+          Id
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectName" [disabled]="!TabelaProject">
+          Name
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectDescription" [disabled]="!TabelaProject">
+          Description
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectCreateTSP" [disabled]="!TabelaProject">
+          Create TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectUpdateTSP" [disabled]="!TabelaProject">
+          Update TSP
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectRegistrationFrom" [disabled]="!TabelaProject">
+          Registration From
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectRegistrationTo" [disabled]="!TabelaProject">
+          Registration To
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectParent" [disabled]="!TabelaProject">
+          Parent
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectChildren" [disabled]="!TabelaProject">
+          Children
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectEvents" [disabled]="!TabelaProject">
+          Events
+        </mat-checkbox>
+
+      </section>
+    </section>
+
 
     <div class="filtrar-limpar">
       <button mat-raised-button [disabled]="!validForm()" (click)="filtrar()" class="button-login" color="primary">
@@ -199,156 +413,38 @@
 
 </mat-expansion-panel>
 
-<mat-tab-group>
-  <mat-tab label="Dasboard Imprensa">
-    <div #dashboard>
-      <h1>Imprensa</h1>
-      <button mat-raised-button (click)="gerarPDF()" class="button-login" color="primary">
-        Gerar PDF
-      </button>
-
-      <button mat-raised-button (click)="gerarDashboard()" class="button-login" color="primary">
-        Gerar Dashboard
-      </button>
-
-      <mat-grid-list [cols]="nubergraphs" rowHeight="440px">
-
-        <mat-grid-tile>
-          <mat-card>
-            <mat-card-content>
-              <app-doughnut-chart #qualquer (chartImage)="handleChartImage($event)" [data]="dataSentimento"
-                [color]="colorSentimento" title='Notícias por Sentimento'></app-doughnut-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-card>
-            <mat-card-content>
-              <app-doughnut-chart #qualquer (chartImage)="handleChartImage($event)" [data]="dataMidia"
-                [color]="colorMidia" title='Notícias por Tipos de Mídia'></app-doughnut-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-card>
-            <mat-card-content>
-              <app-doughnut-chart #qualquer (chartImage)="handleChartImage($event)" [data]="dataVeiculo"
-                title='Notícias por Veículo'></app-doughnut-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
 
 
+<h1>Tabela de dados</h1>
+<mat-card>
+  <mat-card-content>
+    <div class="mat-elevation-z8">
+      <section class="example-container mat-elevation-z8" tabindex="0">
 
-      </mat-grid-list>
+
+        <table mat-table [dataSource]="dataSource" matSort class="example-container">
+
+          <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+            <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+            <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+
+          </tr>
+        </table>
+      </section>
+
+      <mat-paginator [pageSizeOptions]="[10, 50, 100]" (page)="handlePageEvent($event)" [length]="length"
+        [pageSize]="rowsPerPage" [pageIndex]="paginaAtual-1" [showFirstLastButtons]="true">
+
+      </mat-paginator>
     </div>
-  </mat-tab>
 
-  <mat-tab label="Tabela Imprensa">
-    <h1>Tabela de dados</h1>
-    <mat-card>
-      <mat-card-content>
-        <div class="mat-elevation-z8">
-          <section class="example-container mat-elevation-z8" tabindex="0">
-
-
-            <table mat-table [dataSource]="dataSource" matSort class="example-container">
-
-              <!-- ID Column -->
-              <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-              </ng-container>
-
-              <!-- datapubli Column -->
-              <ng-container matColumnDef="datapubli">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
-                <td mat-cell *matCellDef="let row"> {{row.datapubli}} </td>
-              </ng-container>
-
-              <!-- grupo Column -->
-              <ng-container matColumnDef="grupo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Grupo</th>
-                <td mat-cell *matCellDef="let row"> {{row.grupo}} </td>
-              </ng-container>
-
-              <!-- empresa Column -->
-              <ng-container matColumnDef="empresa">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
-                <td mat-cell *matCellDef="let row"> {{row.empresa}} </td>
-              </ng-container>
-
-              <!-- midia Column -->
-              <ng-container matColumnDef="midia">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Mídia</th>
-                <td mat-cell *matCellDef="let row"> {{row.midia}} </td>
-              </ng-container>
-
-              <!-- veiculo Column -->
-              <ng-container matColumnDef="veiculo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Veículo</th>
-                <td mat-cell *matCellDef="let row"> {{row.veiculo}} </td>
-              </ng-container>
-
-              <!-- programa Column -->
-              <ng-container matColumnDef="programa">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Programa</th>
-                <td mat-cell *matCellDef="let row"> {{row.programa}} </td>
-              </ng-container>
-
-              <!-- categoria Column -->
-              <ng-container matColumnDef="categoria">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
-                <td mat-cell *matCellDef="let row"> {{row.categoria}} </td>
-              </ng-container>
-
-              <!-- subcategoria Column -->
-              <ng-container matColumnDef="subcategoria">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Subcategoria</th>
-                <td mat-cell *matCellDef="let row"> {{row.subcategoria}} </td>
-              </ng-container>
-
-              <!-- sentimento Column -->
-              <ng-container matColumnDef="sentimento">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sentimento</th>
-                <td mat-cell *matCellDef="let row"> {{row.sentimento}} </td>
-              </ng-container>
-
-              <!-- titulo Column -->
-              <ng-container matColumnDef="titulo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
-                <td mat-cell *matCellDef="let row"> {{row.titulo}} </td>
-              </ng-container>
-
-              <!-- arquivo Column -->
-              <ng-container matColumnDef="arquivo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Arquivo</th>
-                <td mat-cell *matCellDef="let row"> {{row.arquivo}} </td>
-              </ng-container>
-
-
-
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-              <!-- Row shown when there is no matching data. -->
-              <tr class="mat-row" *matNoDataRow>
-
-              </tr>
-            </table>
-          </section>
-
-          <mat-paginator [pageSizeOptions]="[10, 50, 100]" (page)="handlePageEvent($event)" [length]="length"
-            [pageSize]="rowsPerPage" [pageIndex]="paginaAtual-1" [showFirstLastButtons]="true">
-
-          </mat-paginator>
-        </div>
-
-      </mat-card-content>
-    </mat-card>
-  </mat-tab>
-
-</mat-tab-group>
+  </mat-card-content>
+</mat-card>

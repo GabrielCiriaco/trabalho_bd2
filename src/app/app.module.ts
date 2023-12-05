@@ -34,6 +34,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 import { UsuarioAdmComponent } from './pages/usuario-adm/usuario-adm.component';
 
 @NgModule({
@@ -81,6 +83,7 @@ import { UsuarioAdmComponent } from './pages/usuario-adm/usuario-adm.component';
     MatTableModule,
     MatPaginatorModule,
     MatTabsModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

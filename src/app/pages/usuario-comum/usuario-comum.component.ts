@@ -69,10 +69,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   rowsPerPage = 10;
   ultimaPagina = 1;
 
-  colorSentimento = <any>[];
-  colorMidia = <any>[];
-  quantidade = [1, 2, 3, 4];
-
   filterSelected: filterSelected = {} as filterSelected;
   isTelaMenorQue500px: number = 5;
   nubergraphs: number = 2;
@@ -83,9 +79,9 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   ninetyDaysAgo = new Date(new Date().setDate(this.todayDate.getDate() - 90));
 
   filterForm = new FormGroup({
-    eventos: new FormControl('', [this.validateWordEventos()]),
-    espacos: new FormControl('', [this.validateWordEspacos()]),
-    clasEtarias: new FormControl('', [this.validateWordClasEtarias()]),
+    eventos: new FormControl(''),
+    espacos: new FormControl(''),
+    clasEtarias: new FormControl(''),
 
     dataInicial: new FormControl<Date | null>(this.ninetyDaysAgo),
     dataFinal: new FormControl<Date | null>(this.todayDate),
@@ -98,9 +94,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   clasesEtarias: Array<APIReturns> = [];
 
   // variaveis para filtragem de filtros para os filtros ---------------------
-  filteredOptionsEventos?: Observable<APIReturns[]>;
-  filteredOptionsEspacos?: Observable<APIReturns[]>;
-  filteredOptionsClasesEtarias?: Observable<APIReturns[]>;
 
   @ViewChild('completeEvento') completeEvento: MatAutocomplete = <any>{};
   @ViewChild('completeEspaco') completeEspaco: MatAutocomplete = <any>{};
@@ -108,25 +101,134 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     any
   >{};
 
-  displayedColumns: string[] = [
-    'classificacao_etaria',
-    'ends_at',
-    'event_name',
-    'location',
-    'short_description',
-    'space_name',
-    'starts_at',
-    'starts_on',
-  ];
-  dataSource: MatTableDataSource<any>;
-
   @ViewChild(MatPaginator) paginator: MatPaginator = <any>{};
   @ViewChild(MatSort) sort: MatSort = <any>{};
 
   @ViewChildren('qualquer') charts: QueryList<any> = <any>[];
   @ViewChild('dashboard') dashboard!: ElementRef;
 
+  displayedColumns: string[] = [
+    'AgentsId',
+    'AgentsName',
+    'AgentsDescription',
+    'AgentsCreateTSP',
+    'AgentsUpdateTSP',
+    'AgentsParent',
+    'AgentsTerms',
+    'AgentsChildren',
+    'AgentsSpaces',
+    'AgentsEvents',
+    'AgentsProjects',
+    'EventsId',
+    'EventsName',
+    'EventsDescription',
+    'EventsCreateTSP',
+    'EventsUpdateTSP',
+    'EventsClasEtaria',
+    'EventsOwner',
+    'EventsProject',
+    'SpacesId',
+    'SpacesLocation',
+    'SpacesName',
+    'SpacesDescription',
+    'SpacesCreateTSP',
+    'SpacesUpdateTSP',
+    'SpacesEventOcur',
+    'SpacesHorarios',
+    'SpacesTelefone',
+    'SpacesEmail',
+    'SpacesChildren',
+    'SpacesTerms',
+    'SpacesParent',
+    'SpacesOwner',
+    'EventOcurId',
+    'EventOcurStartsOn',
+    'EventOcurStartsAt',
+    'EventOcurEndsAt',
+    'EventOcurFrequency',
+    'EventOcurSeparation',
+    'EventOcurEvent',
+    'EventOcurSpace',
+    'ProjectId',
+    'ProjectName',
+    'ProjectDescription',
+    'ProjectCreateTSP',
+    'ProjectUpdateTSP',
+    'ProjectRegistrationFrom',
+    'ProjectRegistrationTo',
+    'ProjectParent',
+    'ProjectChildren',
+    'ProjectOwner',
+    'ProjectEvents',
+  ];
+
+  columnsToDisplay: string[] = [];
+
+  dataSource: MatTableDataSource<any>;
+
   chartData: chartData = <any>{};
+
+  TabelaEvents: boolean = false;
+  EventsId: boolean = false;
+  EventsName: boolean = false;
+  EventsDescription: boolean = false;
+  EventsCreateTSP: boolean = false;
+  EventsUpdateTSP: boolean = false;
+  EventsClasEtaria: boolean = false;
+  EventsOwner: boolean = false;
+  EventsProject: boolean = false;
+
+  TabelaAgents: boolean = false;
+  AgentsId: boolean = false;
+  AgentsName: boolean = false;
+  AgentsDescription: boolean = false;
+  AgentsCreateTSP: boolean = false;
+  AgentsUpdateTSP: boolean = false;
+  AgentsParent: boolean = false;
+  AgentsTerms: boolean = false;
+  AgentsChildren: boolean = false;
+  AgentsSpaces: boolean = false;
+  AgentsEvents: boolean = false;
+  AgentsProjects: boolean = false;
+
+  TabelaSpaces: boolean = false;
+  SpacesId: boolean = false;
+  SpacesLocation: boolean = false;
+  SpacesName: boolean = false;
+  SpacesDescription: boolean = false;
+  SpacesCreateTSP: boolean = false;
+  SpacesUpdateTSP: boolean = false;
+  SpacesEventOcur: boolean = false;
+  SpacesHorarios: boolean = false;
+  SpacesTelefone: boolean = false;
+  SpacesEmail: boolean = false;
+  SpacesChildren: boolean = false;
+  SpacesTerms: boolean = false;
+  SpacesParent: boolean = false;
+  SpacesOwner: boolean = false;
+
+  TabelaEventOcur: boolean = false;
+  EventOcurId: boolean = false;
+  EventOcurStartsOn: boolean = false;
+  EventOcurStartsAt: boolean = false;
+  EventOcurEndsAt: boolean = false;
+  EventOcurFrequency: boolean = false;
+  EventOcurSeparation: boolean = false;
+  EventOcurEvent: boolean = false;
+  EventOcurSpace: boolean = false;
+
+  TabelaProject: boolean = false;
+  ProjectId: boolean = false;
+  ProjectName: boolean = false;
+  ProjectDescription: boolean = false;
+  ProjectCreateTSP: boolean = false;
+  ProjectUpdateTSP: boolean = false;
+  ProjectRegistrationFrom: boolean = false;
+  ProjectRegistrationTo: boolean = false;
+  ProjectParent: boolean = false;
+  ProjectChildren: boolean = false;
+  ProjectOwner: boolean = false;
+  ProjectEvents: boolean = false;
 
   constructor(
     private eventoService: EventoService,
@@ -349,6 +451,9 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
 
   criarStringRequest() {
     var request: string = '';
+
+    request = this.criarSringRequestSelects();
+
     if (this.filterSelected.evento != undefined)
       request = request.concat(`id_evento=${this.filterSelected.evento}&`);
 
@@ -371,12 +476,243 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     if (request.endsWith('&')) {
       request = request.slice(0, -1);
     }
+
+    return request;
+  }
+
+  criarSringRequestSelects() {
+    var request = '';
+
+    if (this.TabelaAgents) {
+      if (this.AgentsId) {
+        request = request.concat(`AgentsId=True&`);
+        this.columnsToDisplay.push('AgentsId');
+      }
+      if (this.AgentsName) {
+        request = request.concat(`AgentsName=True&`);
+        this.columnsToDisplay.push('AgentsName');
+      }
+      if (this.AgentsDescription) {
+        request = request.concat(`AgentsDescription=True&`);
+        this.columnsToDisplay.push('AgentsDescription');
+      }
+      if (this.AgentsCreateTSP) {
+        request = request.concat(`AgentsCreateTSP=True&`);
+        this.columnsToDisplay.push('AgentsCreateTSP');
+      }
+      if (this.AgentsUpdateTSP) {
+        request = request.concat(`AgentsUpdateTSP=True&`);
+        this.columnsToDisplay.push('AgentsUpdateTSP');
+      }
+      if (this.AgentsParent) {
+        request = request.concat(`AgentsParent=True&`);
+        this.columnsToDisplay.push('AgentsParent');
+      }
+      if (this.AgentsTerms) {
+        request = request.concat(`AgentsTerms=True&`);
+        this.columnsToDisplay.push('AgentsTerms');
+      }
+      if (this.AgentsChildren) {
+        request = request.concat(`AgentsChildren=True&`);
+        this.columnsToDisplay.push('AgentsChildren');
+      }
+      if (this.AgentsSpaces) {
+        request = request.concat(`AgentsSpaces=True&`);
+        this.columnsToDisplay.push('AgentsSpaces');
+      }
+      if (this.AgentsEvents) {
+        request = request.concat(`AgentsEvents=True&`);
+        this.columnsToDisplay.push('AgentsEvents');
+      }
+      if (this.AgentsProjects) {
+        request = request.concat(`AgentsProjects=True&`);
+        this.columnsToDisplay.push('AgentsProjects');
+      }
+    }
+    if (this.TabelaEvents) {
+      if (this.EventsId) {
+        request = request.concat(`EventsId=True&`);
+        this.columnsToDisplay.push('EventsId');
+      }
+      if (this.EventsName) {
+        request = request.concat(`EventsName=True&`);
+        this.columnsToDisplay.push('EventsName');
+      }
+      if (this.EventsDescription) {
+        request = request.concat(`EventsDescription=True&`);
+        this.columnsToDisplay.push('EventsDescription');
+      }
+      if (this.EventsCreateTSP) {
+        request = request.concat(`EventsCreateTSP=True&`);
+        this.columnsToDisplay.push('EventsCreateTSP');
+      }
+      if (this.EventsUpdateTSP) {
+        request = request.concat(`EventsUpdateTSP=True&`);
+        this.columnsToDisplay.push('EventsUpdateTSP');
+      }
+      if (this.EventsClasEtaria) {
+        request = request.concat(`EventsClasEtaria=True&`);
+        this.columnsToDisplay.push('EventsClasEtaria');
+      }
+      if (this.EventsOwner) {
+        request = request.concat(`EventsOwner=True&`);
+        this.columnsToDisplay.push('EventsOwner');
+      }
+      if (this.EventsProject) {
+        request = request.concat(`EventsProject=True&`);
+        this.columnsToDisplay.push('EventsProject');
+      }
+    }
+
+    if (this.TabelaSpaces) {
+      if (this.SpacesId) {
+        request = request.concat(`SpacesId=True&`);
+        this.columnsToDisplay.push('SpacesId');
+      }
+      if (this.SpacesLocation) {
+        request = request.concat(`SpacesLocation=True&`);
+        this.columnsToDisplay.push('SpacesLocation');
+      }
+      if (this.SpacesName) {
+        request = request.concat(`SpacesName=True&`);
+        this.columnsToDisplay.push('SpacesName');
+      }
+      if (this.SpacesDescription) {
+        request = request.concat(`SpacesDescription=True&`);
+        this.columnsToDisplay.push('SpacesDescription');
+      }
+      if (this.SpacesCreateTSP) {
+        request = request.concat(`SpacesCreateTSP=True&`);
+        this.columnsToDisplay.push('SpacesCreateTSP');
+      }
+      if (this.SpacesUpdateTSP) {
+        request = request.concat(`SpacesUpdateTSP=True&`);
+        this.columnsToDisplay.push('SpacesUpdateTSP');
+      }
+      if (this.SpacesEventOcur) {
+        request = request.concat(`SpacesEventOcur=True&`);
+        this.columnsToDisplay.push('SpacesEventOcur');
+      }
+      if (this.SpacesHorarios) {
+        request = request.concat(`SpacesHorarios=True&`);
+        this.columnsToDisplay.push('SpacesHorarios');
+      }
+      if (this.SpacesTelefone) {
+        request = request.concat(`SpacesTelefone=True&`);
+        this.columnsToDisplay.push('SpacesTelefone');
+      }
+      if (this.SpacesEmail) {
+        request = request.concat(`SpacesEmail=True&`);
+        this.columnsToDisplay.push('SpacesEmail');
+      }
+      if (this.SpacesChildren) {
+        request = request.concat(`SpacesChildren=True&`);
+        this.columnsToDisplay.push('SpacesChildren');
+      }
+      if (this.SpacesTerms) {
+        request = request.concat(`SpacesTerms=True&`);
+        this.columnsToDisplay.push('SpacesTerms');
+      }
+      if (this.SpacesParent) {
+        request = request.concat(`SpacesParent=True&`);
+        this.columnsToDisplay.push('SpacesParent');
+      }
+      if (this.SpacesOwner) {
+        request = request.concat(`SpacesOwner=True&`);
+        this.columnsToDisplay.push('SpacesOwner');
+      }
+    }
+
+    if (this.TabelaEventOcur) {
+      if (this.EventOcurId) {
+        request = request.concat(`EventOcurId=True&`);
+        this.columnsToDisplay.push('EventOcurId');
+      }
+      if (this.EventOcurStartsOn) {
+        request = request.concat(`EventOcurStartsOn=True&`);
+        this.columnsToDisplay.push('EventOcurStartsOn');
+      }
+      if (this.EventOcurStartsAt) {
+        request = request.concat(`EventOcurStartsAt=True&`);
+        this.columnsToDisplay.push('EventOcurStartsAt');
+      }
+      if (this.EventOcurEndsAt) {
+        request = request.concat(`EventOcurEndsAt=True&`);
+        this.columnsToDisplay.push('EventOcurEndsAt');
+      }
+      if (this.EventOcurFrequency) {
+        request = request.concat(`EventOcurFrequency=True&`);
+        this.columnsToDisplay.push('EventOcurFrequency');
+      }
+      if (this.EventOcurSeparation) {
+        request = request.concat(`EventOcurSeparation=True&`);
+        this.columnsToDisplay.push('EventOcurSeparation');
+      }
+      if (this.EventOcurEvent) {
+        request = request.concat(`EventOcurEvent=True&`);
+        this.columnsToDisplay.push('EventOcurEvent');
+      }
+      if (this.EventOcurSpace) {
+        request = request.concat(`EventOcurSpace=True&`);
+        this.columnsToDisplay.push('EventOcurSpace');
+      }
+    }
+
+    if (this.TabelaProject) {
+      if (this.ProjectId) {
+        request = request.concat(`ProjectId=True&`);
+        this.columnsToDisplay.push('ProjectId');
+      }
+      if (this.ProjectName) {
+        request = request.concat(`ProjectName=True&`);
+        this.columnsToDisplay.push('ProjectName');
+      }
+      if (this.ProjectDescription) {
+        request = request.concat(`ProjectDescription=True&`);
+        this.columnsToDisplay.push('ProjectDescription');
+      }
+      if (this.ProjectCreateTSP) {
+        request = request.concat(`ProjectCreateTSP=True&`);
+        this.columnsToDisplay.push('ProjectCreateTSP');
+      }
+      if (this.ProjectUpdateTSP) {
+        request = request.concat(`ProjectUpdateTSP=True&`);
+        this.columnsToDisplay.push('ProjectUpdateTSP');
+      }
+      if (this.ProjectRegistrationFrom) {
+        request = request.concat(`ProjectRegistrationFrom=True&`);
+        this.columnsToDisplay.push('ProjectRegistrationFrom');
+      }
+      if (this.ProjectRegistrationTo) {
+        request = request.concat(`ProjectRegistrationTo=True&`);
+        this.columnsToDisplay.push('ProjectRegistrationTo');
+      }
+      if (this.ProjectParent) {
+        request = request.concat(`ProjectParent=True&`);
+        this.columnsToDisplay.push('ProjectParent');
+      }
+      if (this.ProjectChildren) {
+        request = request.concat(`ProjectChildren=True&`);
+        this.columnsToDisplay.push('ProjectChildren');
+      }
+      if (this.ProjectOwner) {
+        request = request.concat(`ProjectOwner=True&`);
+        this.columnsToDisplay.push('ProjectOwner');
+      }
+      if (this.ProjectEvents) {
+        request = request.concat(`ProjectEvents=True&`);
+        this.columnsToDisplay.push('ProjectEvents');
+      }
+    }
+
     return request;
   }
 
   filtrar() {
     this.showchips();
+    this.columnsToDisplay = [];
     var request = this.criarStringRequest();
+    console.log(this.columnsToDisplay);
 
     Swal.fire({
       background: '#ffffff00',
@@ -453,37 +789,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
 
   // --------------------------------- evento -----------------------------------------------
 
-  validateWordEventos(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) {
-        return null; // A palavra é válida
-      }
-      const enteredWord = control.value;
-
-      if (this.eventos.map((evento) => evento.name).includes(enteredWord)) {
-        return null; // A palavra é válida
-      } else {
-        return { invalidWord: true }; // A palavra é inválida
-      }
-    };
-  }
-
-  valueChangesEvento() {
-    this.filteredOptionsEventos =
-      this.filterForm.controls.eventos.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.filterEvento(value as string))
-      );
-  }
-
-  filterEvento(value: string): APIReturns[] {
-    if (value == null) value = '';
-    const filterValue = value.toLowerCase();
-    return this.eventos.filter((option) =>
-      option.name.toLowerCase().includes(filterValue)
-    );
-  }
-
   async listar_eventos() {
     return new Promise((resolve, reject) => {
       this.eventoService.listarEventosCommon().subscribe({
@@ -491,8 +796,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
           value.forEach((element) => {
             this.eventos.push(element);
           });
-
-          this.valueChangesEvento();
           resolve(true);
         },
       });
@@ -500,37 +803,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   }
 
   // --------------------------------- espaco----------------------------------------------
-
-  validateWordEspacos(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) {
-        return null; // A palavra é válida
-      }
-      const enteredWord = control.value;
-
-      if (this.espacos.map((espaco) => espaco.name).includes(enteredWord)) {
-        return null; // A palavra é válida
-      } else {
-        return { invalidWord: true }; // A palavra é inválida
-      }
-    };
-  }
-
-  valueChangesEspaco() {
-    this.filteredOptionsEspacos =
-      this.filterForm.controls.espacos.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.filterEspaco(value as string))
-      );
-  }
-
-  filterEspaco(value: string): APIReturns[] {
-    if (value == null) value = '';
-    const filterValue = value.toLowerCase();
-    return this.espacos.filter((option) =>
-      option.name.toLowerCase().includes(filterValue)
-    );
-  }
 
   async listar_espacos() {
     return new Promise((resolve, reject) => {
@@ -540,8 +812,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             this.espacos.push(element);
           });
           console.log(this.espacos);
-
-          this.valueChangesEspaco();
           resolve(true);
         },
       });
@@ -549,41 +819,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   }
 
   // --------------------------------- clasEtaria ----------------------------------------------
-
-  validateWordClasEtarias(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) {
-        return null; // A palavra é válida
-      }
-      const enteredWord = control.value;
-
-      if (
-        this.clasesEtarias
-          .map((clasEtaria) => clasEtaria.name)
-          .includes(enteredWord)
-      ) {
-        return null; // A palavra é válida
-      } else {
-        return { invalidWord: true }; // A palavra é inválida
-      }
-    };
-  }
-
-  valueChangesClasEtaria() {
-    this.filteredOptionsClasesEtarias =
-      this.filterForm.controls.clasEtarias.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.filterClasEtaria(value as string))
-      );
-  }
-
-  filterClasEtaria(value: string): APIReturns[] {
-    if (value == null) value = '';
-    const filterValue = value.toLowerCase();
-    return this.clasesEtarias.filter((option) =>
-      option.name.toLowerCase().includes(filterValue)
-    );
-  }
 
   async listar_clasEtarias() {
     return new Promise((resolve, reject) => {
@@ -593,61 +828,13 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             this.clasesEtarias.push(element);
           });
           console.log(this.clasesEtarias);
-
-          this.valueChangesClasEtaria();
           resolve(true);
         },
       });
     });
   }
 
-  // --------------------------------- Cores -----------------------------------------------
-  setColorSentimento(matriz: any[][]): Color[] {
-    const colors: Color[] = [];
-    matriz.forEach((element) => {
-      if (element[0] === 'POSITIVA') {
-        colors.push('#77C4A8');
-      }
-      if (element[0] === 'NEGATIVA') {
-        colors.push('#DD6B7F');
-      }
-      if (element[0] === 'NEUTRA') {
-        colors.push('#F5C869');
-      }
-      if (element[0] === 'PUBLICIDADE') {
-        colors.push('#6E9CD2');
-      }
-    });
-    return colors;
-  }
-
-  setColorMidia(matriz: any[][]): Color[] {
-    const colors: Color[] = [];
-    matriz.forEach((element) => {
-      if (element[0] === 'Site') {
-        colors.push('#3257A8');
-      }
-      if (element[0] === 'TV') {
-        colors.push('#8B3D88');
-      }
-      if (element[0] === 'Rádio') {
-        colors.push('#37A794');
-      }
-      if (element[0] === 'Impresso') {
-        colors.push('#DD6B7F');
-      }
-    });
-    return colors;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  // --------------------------------- outros -----------------------------------------------
 
   async handlePageEvent(event: PageEvent) {
     this.dataSource = new MatTableDataSource();
@@ -884,89 +1071,23 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     this.pageIndex = event.pageIndex;
   }
 
-  async gerarPDF() {
-    let doc: jsPDF;
-    console.log('charts', this.charts);
-
-    this.charts.forEach(async (element, index) => {
-      element.imageOutput();
-
-      if (index == 0) {
-        doc = new jsPDF({
-          orientation:
-            this.chartData.imgWidth > this.chartData.imgHeight
-              ? 'landscape'
-              : 'portrait', // Define a orientação com base nas dimensões do gráfico
-          unit: 'px', // Unidade de medida para as dimensões
-          format: [this.chartData.imgWidth + 10, this.chartData.imgHeight + 40],
-        });
-      }
-
-      doc.addImage(
-        this.chartData.dataURL,
-        'PNG',
-        10,
-        10,
-        this.chartData.imgWidth,
-        this.chartData.imgHeight
-      ); // coordenadas x, y e dimensões da imagem
-      doc.addPage();
-    });
-
-    if (doc!) doc.save('chart.pdf');
+  SelectEvents(event: any) {
+    this.TabelaEvents = !this.TabelaEvents;
   }
 
-  async gerarDashboard() {
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-    });
-
-    const options = {
-      background: 'white',
-      scale: 3, // Ajuste conforme necessário para a qualidade da imagem
-    };
-
-    // Esperar 1 segundo antes de capturar a div
-
-    try {
-      const canvas = await html2canvas(
-        this.dashboard.nativeElement as HTMLElement,
-        options
-      );
-      const imgData = canvas.toDataURL('image/png');
-
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('dashboard.pdf'); // Salva o PDF
-    } catch (error) {
-      console.error('Erro ao gerar o PDF:', error);
-    }
+  SelectSpaces(event: any) {
+    this.TabelaSpaces = !this.TabelaSpaces;
   }
 
-  handleChartImage(chartImageObj: {
-    dataURL: string;
-    imgWidth: number;
-    imgHeight: number;
-  }): void {
-    const { dataURL, imgWidth, imgHeight } = chartImageObj;
-    this.chartData.dataURL = dataURL;
-    this.chartData.imgWidth = imgWidth;
-    this.chartData.imgHeight = imgHeight;
+  SelectEventOcur(event: any) {
+    this.TabelaEventOcur = !this.TabelaEventOcur;
+  }
 
-    // Agora você pode usar esses dados como preferir, talvez adicionar a um PDF
+  SelectProject(event: any) {
+    this.TabelaProject = !this.TabelaProject;
+  }
+
+  SelectAgents(event: any) {
+    this.TabelaAgents = !this.TabelaAgents;
   }
 }
