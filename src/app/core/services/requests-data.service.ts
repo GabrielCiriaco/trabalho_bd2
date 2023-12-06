@@ -12,6 +12,11 @@ export class RequestsService {
   constructor(private http: HttpClient) {}
 
   listarTabelaCommon(filterRequest?: string): Observable<any> {
+    console.log(
+      'aqui está',
+      `${this.apiUrl}/common/events/paginated${filterRequest}`
+    );
+
     return this.http.get<any>(
       `${this.apiUrl}/common/events/paginated${filterRequest}`,
       {
@@ -33,5 +38,57 @@ export class RequestsService {
         },
       }
     );
+  }
+
+  gerarCSVCommon(filterRequest?: string): void {
+    this.http
+      .get(`${this.apiUrl}/common/events/csv?${filterRequest}`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
+        },
+        responseType: 'blob', // Define o tipo de resposta como Blob
+      })
+      .subscribe((data: Blob) => {
+        const blob = new Blob([data], { type: 'text/csv' });
+
+        // Cria um URL temporário para o Blob
+        const downloadURL = window.URL.createObjectURL(blob);
+
+        // Cria um elemento <a> para iniciar o download
+        const link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = 'nome_do_arquivo.csv';
+        link.click();
+
+        // Libera o URL temporário
+        window.URL.revokeObjectURL(downloadURL);
+      });
+  }
+
+  gerarCSVProductor(filterRequest?: string): void {
+    this.http
+      .get(`${this.apiUrl}/productor/events/csv?${filterRequest}`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'ngrok-skip-browser-warning': '546',
+        },
+        responseType: 'blob', // Define o tipo de resposta como Blob
+      })
+      .subscribe((data: Blob) => {
+        const blob = new Blob([data], { type: 'text/csv' });
+
+        // Cria um URL temporário para o Blob
+        const downloadURL = window.URL.createObjectURL(blob);
+
+        // Cria um elemento <a> para iniciar o download
+        const link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = 'nome_do_arquivo.csv';
+        link.click();
+
+        // Libera o URL temporário
+        window.URL.revokeObjectURL(downloadURL);
+      });
   }
 }

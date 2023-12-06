@@ -90,7 +90,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
   nubergraphs: number = 2;
   chipShow = <any>[];
   minDate = <Date>{};
-  maxDate = new Date();
+  maxDate = <Date>{};
   todayDate = new Date();
   ninetyDaysAgo = new Date(new Date().setDate(this.todayDate.getDate() - 90));
 
@@ -317,26 +317,26 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             this.listar_donoEventos(),
             this.listar_donoProjetos(),
 
-            new Promise((resolve, reject) => {
-              this.requestsService
-                .listarTabelaProductor(
-                  `1?page=1&per_page=${
-                    this.rowsPerPage
-                  }&${this.criarStringRequest()}`
-                )
-                .subscribe({
-                  next: (value) => {
-                    this.dataTabela = value.records;
-                    this.length = value._metadata.total_count;
-                    this.dataSource = new MatTableDataSource(this.dataTabela);
-                    this.ultimaPagina = value._metadata.total_pages;
-                    resolve(true);
-                  },
-                  error: (error) => {
-                    reject(true);
-                  },
-                });
-            }),
+            // new Promise((resolve, reject) => {
+            //   this.requestsService
+            //     .listarTabelaProductor(
+            //       `?page=1&per_page=${
+            //         this.rowsPerPage
+            //       }&${this.criarStringRequest()}`
+            //     )
+            //     .subscribe({
+            //       next: (value) => {
+            //         this.dataTabela = value.records;
+            //         this.length = value._metadata.total_count;
+            //         this.dataSource = new MatTableDataSource(this.dataTabela);
+            //         this.ultimaPagina = value._metadata.total_pages;
+            //         resolve(true);
+            //       },
+            //       error: (error) => {
+            //         reject(true);
+            //       },
+            //     });
+            // }),
           ]);
           Swal.close();
         } catch (error) {
@@ -561,32 +561,32 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
     request = this.criarSringRequestSelects();
     if (this.filterSelected.evento != undefined)
-      request = request.concat(`id_evento=${this.filterSelected.evento}&`);
+      request = request.concat(`event_name=${this.filterSelected.evento}&`);
 
     if (this.filterSelected.espaco != undefined)
-      request = request.concat(`id_espaco=${this.filterSelected.espaco}&`);
+      request = request.concat(`space_name=${this.filterSelected.espaco}&`);
 
     if (this.filterSelected.projeto != undefined)
-      request = request.concat(`id_projeto=${this.filterSelected.projeto}&`);
+      request = request.concat(`project_name=${this.filterSelected.projeto}&`);
 
     if (this.filterSelected.clasEtaria != undefined)
       request = request.concat(
-        `id_clas_etaria=${this.filterSelected.clasEtaria}&`
+        `classificacao_etaria=${this.filterSelected.clasEtaria}&`
       );
 
     if (this.filterSelected.donoEspaco != undefined)
       request = request.concat(
-        `id_dono_espaco=${this.filterSelected.donoEspaco}&`
+        `dono_espaco=${this.filterSelected.donoEspaco}&`
       );
 
     if (this.filterSelected.donoEvento != undefined)
       request = request.concat(
-        `id_dono_evento=${this.filterSelected.donoEvento}&`
+        `idono_evento=${this.filterSelected.donoEvento}&`
       );
 
     if (this.filterSelected.donoProjeto != undefined)
       request = request.concat(
-        `id_dono_projeto=${this.filterSelected.donoProjeto}&`
+        `dono_projeto=${this.filterSelected.donoProjeto}&`
       );
 
     if (this.filterSelected.dataInicial != undefined)
@@ -607,6 +607,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     var request = '';
 
     if (this.TabelaAgents) {
+      request = request.concat(`agents=True&`);
       if (this.AgentsId) {
         request = request.concat(`AgentsId=True&`);
         this.columnsToDisplay.push('AgentsId');
@@ -653,6 +654,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
       }
     }
     if (this.TabelaEvents) {
+      request = request.concat(`events=True&`);
       if (this.EventsId) {
         request = request.concat(`EventsId=True&`);
         this.columnsToDisplay.push('EventsId');
@@ -688,6 +690,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaSpaces) {
+      request = request.concat(`spaces=True&`);
       if (this.SpacesId) {
         request = request.concat(`SpacesId=True&`);
         this.columnsToDisplay.push('SpacesId');
@@ -747,6 +750,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaEventOcur) {
+      request = request.concat(`eventOcur=True&`);
       if (this.EventOcurId) {
         request = request.concat(`EventOcurId=True&`);
         this.columnsToDisplay.push('EventOcurId');
@@ -782,6 +786,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaProject) {
+      request = request.concat(`project=True&`);
       if (this.ProjectId) {
         request = request.concat(`ProjectId=True&`);
         this.columnsToDisplay.push('ProjectId');
@@ -845,9 +850,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=1&per_page=${
-                    this.rowsPerPage
-                  }&${this.criarStringRequest()}`
+                  `?page=1&per_page=${this.rowsPerPage}&${request}`
                 )
                 .subscribe({
                   next: (value) => {
@@ -1022,6 +1025,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   async handlePageEvent(event: PageEvent) {
     this.dataSource = new MatTableDataSource();
+    this.columnsToDisplay = [];
 
     if (event.pageSize != this.rowsPerPage) {
       Swal.fire({
@@ -1036,7 +1040,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=${this.paginaAtual}&per_page=${
+                  `?page=${this.paginaAtual}&per_page=${
                     event.pageSize
                   }&${this.criarStringRequest()}`
                 )
@@ -1082,7 +1086,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=${this.paginaAtual + 1}&per_page=${
+                  `?page=${this.paginaAtual + 1}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -1125,7 +1129,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=${this.paginaAtual - 1}&per_page=${
+                  `?page=${this.paginaAtual - 1}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -1172,7 +1176,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=1&per_page=${
+                  `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -1216,7 +1220,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
             await new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `1?page=${this.ultimaPagina}&per_page=${
+                  `?page=${this.ultimaPagina}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )

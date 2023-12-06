@@ -25,11 +25,11 @@
 
         <!-- Filtro de evento------------------------------------------------------------------------ -->
         <mat-grid-tile [colspan]="1">
-          <mat-form-field class="form-field" appearance="outline">
+          <mat-form-field class="form-field" appearance="outline" >
 
             <mat-label>Evento</mat-label>
             <input type="text" placeholder="Evento" (blur)="addFiltroInput('eventos')" matInput
-              formControlName="eventos" [matAutocomplete]="completeEvento">
+              formControlName="eventos" [matAutocomplete]="completeEvento" >
             <mat-error *ngIf="filterForm.get('eventos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeEvento="matAutocomplete">
               <mat-option *ngFor="let option of eventos"
@@ -415,9 +415,11 @@
 
 
 
-<h1>Tabela de dados</h1>
+<h1>Tabela de dados de Administrador</h1>
 <mat-card>
   <mat-card-content>
+
+
     <div class="mat-elevation-z8">
       <section class="example-container mat-elevation-z8" tabindex="0">
 

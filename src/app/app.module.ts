@@ -36,7 +36,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import { UsuarioAdmComponent } from './pages/usuario-adm/usuario-adm.component';
+import { UsuarioAdmComponent } from './shared/usuario-adm/usuario-adm.component';
 
 @NgModule({
   declarations: [

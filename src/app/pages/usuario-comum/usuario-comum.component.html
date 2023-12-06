@@ -67,9 +67,9 @@
 
             <mat-label>Classificação Etária</mat-label>
             <input type="text" placeholder="Classificação Etária" (blur)="addFiltroInput('clasEtarias')" matInput
-              formControlName="clasEtarias" [matAutocomplete]="completeClassEtaria">
+              formControlName="clasEtarias" [matAutocomplete]="completeClasEtaria">
             <mat-error *ngIf="filterForm.get('clasEtarias')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
-            <mat-autocomplete autoActiveFirstOption #completeClassEtaria="matAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #completeClasEtaria="matAutocomplete">
               <mat-option *ngFor="let option of clasesEtarias"
                 (onSelectionChange)="addFiltroSelect($event,'clasEtaria', option.name)" [value]="option.name">
                 {{option.name}}
@@ -99,10 +99,10 @@
         <mat-grid-tile>
           <mat-form-field class="form-field" appearance="outline">
             <mat-label>Data final</mat-label>
-            <input formControlName="dataFinal" (blur)="addFiltroInput('dataFinal')" (dateChange)="setDate($event)"
+            <input matInput formControlName="dataFinal" (blur)="addFiltroInput('dataFinal')" (dateChange)="setDate($event)"
               [max]="todayDate" [min]="minDate" matInput [matDatepicker]="data_final" [disabled]="true">
             <mat-datepicker-toggle matIconSuffix [for]="data_final"></mat-datepicker-toggle>
-            <mat-datepicker disabled="false" #data_final></mat-datepicker>
+            <mat-datepicker  #data_final></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -114,7 +114,7 @@
 
     <section>
       <section>
-        <mat-checkbox [checked]="TabelaAgents" value="Agents" (change)="SelectAgents($event.checked)">
+        <mat-checkbox [checked]="TabelaAgents" [disabled]="true" value="Agents" (change)="SelectAgents($event.checked)">
           Tabela Agents
         </mat-checkbox>
       </section>
@@ -258,7 +258,7 @@
         <mat-checkbox [(ngModel)]="EventOcurId" [disabled]="true">
           Id
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventOcurStartsOn" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurStartsOn" [disabled]="!TabelaEventOcur">
           StartsOn
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="EventOcurStartsAt" [disabled]="!TabelaEventOcur">
@@ -327,10 +327,10 @@
 
 
     <div class="filtrar-limpar">
-      <button mat-raised-button [disabled]="!validForm()" (click)="filtrar()" class="button-login" color="primary">
+      <button mat-raised-button (click)="filtrar()" class="button-login" color="primary">
         Filtrar
       </button>
-      <button mat-raised-button [disabled]="validClearFilter()" (click)="limparFiltros()" class="button-login"
+      <button mat-raised-button  (click)="limparFiltros()" class="button-login"
         color="primary">
         Limpar Filtros
       </button>
@@ -343,9 +343,17 @@
 
 
 
-<h1>Tabela de dados</h1>
+<h1>Tabela de dados de Usuário Comum</h1>
 <mat-card>
   <mat-card-content>
+
+    <div style="padding: 10px;">
+      <button mat-raised-button (click)="gerarCSV()" class="button-login" color="primary">
+        Gerar CSV
+      </button>
+
+    </div>
+
     <div class="mat-elevation-z8">
       <section class="example-container mat-elevation-z8" tabindex="0">
 

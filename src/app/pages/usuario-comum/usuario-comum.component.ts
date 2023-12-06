@@ -74,17 +74,23 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   nubergraphs: number = 2;
   chipShow = <any>[];
   minDate = <Date>{};
-  maxDate = new Date();
+  maxDate = <Date>{};
   todayDate = new Date();
-  ninetyDaysAgo = new Date(new Date().setDate(this.todayDate.getDate() - 90));
+  ninetyDaysAgo = new Date(new Date().setDate(new Date().getDate() - 90));
 
   filterForm = new FormGroup({
-    eventos: new FormControl(''),
-    espacos: new FormControl(''),
-    clasEtarias: new FormControl(''),
+    eventos: new FormControl({ value: '', disabled: true }),
+    espacos: new FormControl({ value: '', disabled: true }),
+    clasEtarias: new FormControl({ value: '', disabled: true }),
 
-    dataInicial: new FormControl<Date | null>(this.ninetyDaysAgo),
-    dataFinal: new FormControl<Date | null>(this.todayDate),
+    dataInicial: new FormControl<Date | null>({
+      value: null,
+      disabled: true,
+    }),
+    dataFinal: new FormControl<Date | null>({
+      value: null,
+      disabled: true,
+    }),
   });
 
   // arrays de opçoes para os filtros ---------------------
@@ -245,9 +251,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
   ngOnInit(): void {
-    this.setDate(this.filterForm.controls.dataInicial.value);
-    this.setDate(this.filterForm.controls.dataFinal.value);
-    this.showchips();
     var request = this.criarStringRequest();
 
     this.onResize();
@@ -265,27 +268,27 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             this.listar_espacos(),
             this.listar_clasEtarias(),
 
-            new Promise((resolve, reject) => {
-              this.requestsService
-                .listarTabelaCommon(
-                  `?page=1&per_page=${
-                    this.rowsPerPage
-                  }&${this.criarStringRequest()}`
-                )
-                .subscribe({
-                  next: (value) => {
-                    this.dataTabela = value.records;
-                    this.length = value._metadata.total_count;
-                    this.dataSource = new MatTableDataSource(this.dataTabela);
-                    this.ultimaPagina = value._metadata.total_pages;
-                    console.log(this.dataTabela);
-                    resolve(true);
-                  },
-                  error: (error) => {
-                    reject(true);
-                  },
-                });
-            }),
+            // new Promise((resolve, reject) => {
+            //   this.requestsService
+            //     .listarTabelaCommon(
+            //       `?page=1&per_page=${
+            //         this.rowsPerPage
+            //       }&${this.criarStringRequest()}`
+            //     )
+            //     .subscribe({
+            //       next: (value) => {
+            //         this.dataTabela = value.records;
+            //         this.length = value._metadata.total_count;
+            //         this.dataSource = new MatTableDataSource(this.dataTabela);
+            //         this.ultimaPagina = value._metadata.total_pages;
+            //         console.log(this.dataTabela);
+            //         resolve(true);
+            //       },
+            //       error: (error) => {
+            //         reject(true);
+            //       },
+            //     });
+            // }),
           ]);
           Swal.close();
         } catch (error) {
@@ -391,35 +394,6 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     }
   }
 
-  validForm() {
-    if (
-      !this.filterForm.get('eventos')?.errors?.['invalidWord'] &&
-      !this.filterForm.get('espacos')?.errors?.['invalidWord'] &&
-      !this.filterForm.get('clasEtarias')?.errors?.['invalidWord']
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  validClearFilter() {
-    if (
-      (this.filterForm.controls.eventos.value == '' ||
-        this.filterForm.controls.eventos.value == null) &&
-      (this.filterForm.controls.espacos.value == '' ||
-        this.filterForm.controls.espacos.value == null) &&
-      (this.filterForm.controls.clasEtarias.value == '' ||
-        this.filterForm.controls.clasEtarias.value == null) &&
-      this.filterForm.controls.dataInicial.value == this.ninetyDaysAgo &&
-      this.filterForm.controls.dataFinal.value == this.todayDate
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   limparFiltros() {
     this.filterSelected = {} as filterSelected;
 
@@ -430,11 +404,11 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     this.filterForm.controls.espacos.setValue(null);
     this.filterForm.controls.clasEtarias.setValue(null);
 
-    this.filterForm.controls.dataInicial.setValue(this.ninetyDaysAgo);
-    this.filterForm.controls.dataFinal.setValue(this.todayDate);
+    this.filterForm.controls.dataInicial.setValue(null);
+    this.filterForm.controls.dataFinal.setValue(null);
 
-    this.setDate(this.filterForm.controls.dataInicial.value);
-    this.setDate(this.filterForm.controls.dataFinal.value);
+    // this.setDate(this.filterForm.controls.dataInicial.value);
+    // this.setDate(this.filterForm.controls.dataFinal.value);
 
     this.completeEvento.options.forEach((element) => {
       element.deselect();
@@ -446,7 +420,62 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
       element.deselect();
     });
 
-    this.filtrar();
+    this.TabelaAgents = false;
+    this.AgentsId = false;
+    this.AgentsName = false;
+    this.AgentsDescription = false;
+    this.AgentsCreateTSP = false;
+    this.AgentsUpdateTSP = false;
+    this.AgentsParent = false;
+    this.AgentsTerms = false;
+    this.AgentsChildren = false;
+    this.AgentsSpaces = false;
+    this.AgentsEvents = false;
+    this.AgentsProjects = false;
+
+    this.TabelaEvents = false;
+    this.EventsId = false;
+    this.EventsName = false;
+    this.EventsDescription = false;
+    this.EventsCreateTSP = false;
+    this.EventsUpdateTSP = false;
+    this.EventsClasEtaria = false;
+    this.EventsOwner = false;
+    this.EventsProject = false;
+
+    this.TabelaSpaces = false;
+    this.SpacesId = false;
+    this.SpacesLocation = false;
+    this.SpacesName = false;
+    this.SpacesDescription = false;
+    this.SpacesCreateTSP = false;
+    this.SpacesUpdateTSP = false;
+    this.SpacesEventOcur = false;
+    this.SpacesHorarios = false;
+    this.SpacesTelefone = false;
+    this.SpacesEmail = false;
+    this.SpacesChildren = false;
+    this.SpacesTerms = false;
+    this.SpacesParent = false;
+    this.SpacesOwner = false;
+
+    this.TabelaEventOcur = false;
+    this.EventOcurId = false;
+    this.EventOcurStartsOn = false;
+    this.EventOcurStartsAt = false;
+    this.EventOcurEndsAt = false;
+    this.EventOcurFrequency = false;
+    this.EventOcurSeparation = false;
+    this.EventOcurEvent = false;
+    this.EventOcurSpace = false;
+
+    this.filterForm.controls.eventos.disable();
+    this.filterForm.controls.espacos.disable();
+    this.filterForm.controls.clasEtarias.disable();
+    this.filterForm.controls.dataInicial.disable();
+    this.filterForm.controls.dataFinal.disable();
+
+    console.log('ta limpando');
   }
 
   criarStringRequest() {
@@ -455,14 +484,14 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     request = this.criarSringRequestSelects();
 
     if (this.filterSelected.evento != undefined)
-      request = request.concat(`id_evento=${this.filterSelected.evento}&`);
+      request = request.concat(`event_name=${this.filterSelected.evento}&`);
 
     if (this.filterSelected.espaco != undefined)
-      request = request.concat(`id_espaco=${this.filterSelected.espaco}&`);
+      request = request.concat(`space_name=${this.filterSelected.espaco}&`);
 
     if (this.filterSelected.clasEtaria != undefined)
       request = request.concat(
-        `id_clas_etaria=${this.filterSelected.clasEtaria}&`
+        `clas_etaria=${this.filterSelected.clasEtaria}&`
       );
 
     if (this.filterSelected.dataInicial != undefined)
@@ -484,6 +513,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     var request = '';
 
     if (this.TabelaAgents) {
+      request = request.concat(`agents=True&`);
       if (this.AgentsId) {
         request = request.concat(`AgentsId=True&`);
         this.columnsToDisplay.push('AgentsId');
@@ -530,11 +560,13 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
       }
     }
     if (this.TabelaEvents) {
+      request = request.concat(`events=True&`);
       if (this.EventsId) {
         request = request.concat(`EventsId=True&`);
         this.columnsToDisplay.push('EventsId');
       }
       if (this.EventsName) {
+        console.log('entrou');
         request = request.concat(`EventsName=True&`);
         this.columnsToDisplay.push('EventsName');
       }
@@ -565,6 +597,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaSpaces) {
+      request = request.concat(`spaces=True&`);
       if (this.SpacesId) {
         request = request.concat(`SpacesId=True&`);
         this.columnsToDisplay.push('SpacesId');
@@ -624,6 +657,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaEventOcur) {
+      request = request.concat(`eventOcur=True&`);
       if (this.EventOcurId) {
         request = request.concat(`EventOcurId=True&`);
         this.columnsToDisplay.push('EventOcurId');
@@ -659,6 +693,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaProject) {
+      request = request.concat(`project=True&`);
       if (this.ProjectId) {
         request = request.concat(`ProjectId=True&`);
         this.columnsToDisplay.push('ProjectId');
@@ -724,9 +759,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaCommon(
-                  `?page=1&per_page=${
-                    this.rowsPerPage
-                  }&${this.criarStringRequest()}`
+                  `?page=1&per_page=${this.rowsPerPage}&${request}`
                 )
                 .subscribe({
                   next: (value) => {
@@ -793,8 +826,10 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.eventoService.listarEventosCommon().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.eventos.push(element);
+          value.forEach((element, index) => {
+            if (index < 300) {
+              this.eventos.push(element);
+            }
           });
           resolve(true);
         },
@@ -837,6 +872,7 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
   // --------------------------------- outros -----------------------------------------------
 
   async handlePageEvent(event: PageEvent) {
+    this.columnsToDisplay = [];
     this.dataSource = new MatTableDataSource();
 
     if (event.pageSize != this.rowsPerPage) {
@@ -1073,14 +1109,39 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
 
   SelectEvents(event: any) {
     this.TabelaEvents = !this.TabelaEvents;
+    if (this.TabelaEvents) {
+      this.filterForm.controls.eventos.enable();
+      this.filterForm.controls.clasEtarias.enable();
+    } else {
+      this.filterForm.controls.eventos.disable();
+      this.filterForm.controls.eventos.setValue(null);
+      this.filterSelected['evento' as keyof filterSelected] = undefined;
+      this.filterForm.controls.clasEtarias.disable();
+      this.filterForm.controls.clasEtarias.setValue(null);
+      this.filterSelected['clasEtaria' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectSpaces(event: any) {
     this.TabelaSpaces = !this.TabelaSpaces;
+    if (this.TabelaSpaces) {
+      this.filterForm.controls.espacos.enable();
+    } else {
+      this.filterForm.controls.espacos.disable();
+      this.filterForm.controls.espacos.setValue(null);
+      this.filterSelected['espaco' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectEventOcur(event: any) {
     this.TabelaEventOcur = !this.TabelaEventOcur;
+    if (this.TabelaEventOcur) {
+      this.filterForm.controls.dataInicial.enable();
+      this.filterForm.controls.dataFinal.enable();
+    } else {
+      this.filterForm.controls.dataInicial.disable();
+      this.filterForm.controls.dataFinal.disable();
+    }
   }
 
   SelectProject(event: any) {
@@ -1089,5 +1150,12 @@ export class UsuarioComumComponent implements OnInit, AfterViewInit {
 
   SelectAgents(event: any) {
     this.TabelaAgents = !this.TabelaAgents;
+  }
+
+  gerarCSV() {
+    this.columnsToDisplay = [];
+    const request = this.criarStringRequest();
+    console.log(request);
+    this.requestsService.gerarCSVCommon(request);
   }
 }

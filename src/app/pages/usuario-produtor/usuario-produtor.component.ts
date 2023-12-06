@@ -90,21 +90,27 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
   nubergraphs: number = 2;
   chipShow = <any>[];
   minDate = <Date>{};
-  maxDate = new Date();
-  todayDate = new Date();
-  ninetyDaysAgo = new Date(new Date().setDate(this.todayDate.getDate() - 90));
+  maxDate = <Date>{};
+  todayDate = <Date>{};
+  ninetyDaysAgo = new Date(new Date().setDate(new Date().getDate() - 90));
 
   filterForm = new FormGroup({
-    eventos: new FormControl(''),
-    espacos: new FormControl(''),
-    projetos: new FormControl(''),
-    clasEtarias: new FormControl(''),
-    donoEspacos: new FormControl(''),
-    donoEventos: new FormControl(''),
-    donoProjetos: new FormControl(''),
+    eventos: new FormControl({ value: '', disabled: true }),
+    espacos: new FormControl({ value: '', disabled: true }),
+    projetos: new FormControl({ value: '', disabled: true }),
+    clasEtarias: new FormControl({ value: '', disabled: true }),
+    donoEspacos: new FormControl({ value: '', disabled: true }),
+    donoEventos: new FormControl({ value: '', disabled: true }),
+    donoProjetos: new FormControl({ value: '', disabled: true }),
 
-    dataInicial: new FormControl<Date | null>(this.ninetyDaysAgo),
-    dataFinal: new FormControl<Date | null>(this.todayDate),
+    dataInicial: new FormControl<Date | null>({
+      value: null,
+      disabled: true,
+    }),
+    dataFinal: new FormControl<Date | null>({
+      value: null,
+      disabled: true,
+    }),
   });
 
   // arrays de opçoes para os filtros ---------------------
@@ -287,8 +293,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
   ngOnInit(): void {
-    this.setDate(this.filterForm.controls.dataInicial.value);
-    this.setDate(this.filterForm.controls.dataFinal.value);
+    // this.setDate(this.filterForm.controls.dataInicial.value);
+    // this.setDate(this.filterForm.controls.dataFinal.value);
     this.showchips();
     var request = this.criarStringRequest();
 
@@ -519,11 +525,8 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     this.filterForm.controls.donoEventos.setValue(null);
     this.filterForm.controls.donoProjetos.setValue(null);
 
-    this.filterForm.controls.dataInicial.setValue(this.ninetyDaysAgo);
-    this.filterForm.controls.dataFinal.setValue(this.todayDate);
-
-    this.setDate(this.filterForm.controls.dataInicial.value);
-    this.setDate(this.filterForm.controls.dataFinal.value);
+    // this.filterForm.controls.dataInicial.setValue(this.ninetyDaysAgo);
+    // this.filterForm.controls.dataFinal.setValue(this.todayDate);
 
     this.completeEvento.options.forEach((element) => {
       element.deselect();
@@ -547,7 +550,77 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       element.deselect();
     });
 
-    this.filtrar();
+    this.TabelaAgents = false;
+    this.AgentsId = false;
+    this.AgentsName = false;
+    this.AgentsDescription = false;
+    this.AgentsCreateTSP = false;
+    this.AgentsUpdateTSP = false;
+    this.AgentsParent = false;
+    this.AgentsTerms = false;
+    this.AgentsChildren = false;
+    this.AgentsSpaces = false;
+    this.AgentsEvents = false;
+    this.AgentsProjects = false;
+
+    this.TabelaEvents = false;
+    this.EventsId = false;
+    this.EventsName = false;
+    this.EventsDescription = false;
+    this.EventsCreateTSP = false;
+    this.EventsUpdateTSP = false;
+    this.EventsClasEtaria = false;
+    this.EventsOwner = false;
+    this.EventsProject = false;
+
+    this.TabelaSpaces = false;
+    this.SpacesId = false;
+    this.SpacesLocation = false;
+    this.SpacesName = false;
+    this.SpacesDescription = false;
+    this.SpacesCreateTSP = false;
+    this.SpacesUpdateTSP = false;
+    this.SpacesEventOcur = false;
+    this.SpacesHorarios = false;
+    this.SpacesTelefone = false;
+    this.SpacesEmail = false;
+    this.SpacesChildren = false;
+    this.SpacesTerms = false;
+    this.SpacesParent = false;
+    this.SpacesOwner = false;
+
+    this.TabelaEventOcur = false;
+    this.EventOcurId = false;
+    this.EventOcurStartsOn = false;
+    this.EventOcurStartsAt = false;
+    this.EventOcurEndsAt = false;
+    this.EventOcurFrequency = false;
+    this.EventOcurSeparation = false;
+    this.EventOcurEvent = false;
+    this.EventOcurSpace = false;
+
+    this.TabelaProject = false;
+    this.ProjectId = false;
+    this.ProjectName = false;
+    this.ProjectDescription = false;
+    this.ProjectCreateTSP = false;
+    this.ProjectUpdateTSP = false;
+    this.ProjectRegistrationFrom = false;
+    this.ProjectRegistrationTo = false;
+    this.ProjectParent = false;
+    this.ProjectChildren = false;
+    this.ProjectOwner = false;
+    this.ProjectEvents = false;
+
+    this.filterForm.controls.eventos.disable();
+    this.filterForm.controls.espacos.disable();
+    this.filterForm.controls.projetos.disable();
+    this.filterForm.controls.clasEtarias.disable();
+    this.filterForm.controls.donoEspacos.disable();
+    this.filterForm.controls.donoEventos.disable();
+    this.filterForm.controls.donoProjetos.disable();
+    this.filterForm.controls.dataInicial.disable();
+    this.filterForm.controls.dataFinal.disable();
   }
 
   criarStringRequest() {
@@ -555,32 +628,32 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
     request = this.criarSringRequestSelects();
     if (this.filterSelected.evento != undefined)
-      request = request.concat(`id_evento=${this.filterSelected.evento}&`);
+      request = request.concat(`event_name=${this.filterSelected.evento}&`);
 
     if (this.filterSelected.espaco != undefined)
-      request = request.concat(`id_espaco=${this.filterSelected.espaco}&`);
+      request = request.concat(`space_name=${this.filterSelected.espaco}&`);
 
     if (this.filterSelected.projeto != undefined)
-      request = request.concat(`id_projeto=${this.filterSelected.projeto}&`);
+      request = request.concat(`project_name=${this.filterSelected.projeto}&`);
 
     if (this.filterSelected.clasEtaria != undefined)
       request = request.concat(
-        `id_clas_etaria=${this.filterSelected.clasEtaria}&`
+        `clas_etaria=${this.filterSelected.clasEtaria}&`
       );
 
     if (this.filterSelected.donoEspaco != undefined)
       request = request.concat(
-        `id_dono_espaco=${this.filterSelected.donoEspaco}&`
+        `dono_espaco=${this.filterSelected.donoEspaco}&`
       );
 
     if (this.filterSelected.donoEvento != undefined)
       request = request.concat(
-        `id_dono_evento=${this.filterSelected.donoEvento}&`
+        `idono_evento=${this.filterSelected.donoEvento}&`
       );
 
     if (this.filterSelected.donoProjeto != undefined)
       request = request.concat(
-        `id_dono_projeto=${this.filterSelected.donoProjeto}&`
+        `dono_projeto=${this.filterSelected.donoProjeto}&`
       );
 
     if (this.filterSelected.dataInicial != undefined)
@@ -601,6 +674,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     var request = '';
 
     if (this.TabelaAgents) {
+      request = request.concat(`agents=True&`);
       if (this.AgentsId) {
         request = request.concat(`AgentsId=True&`);
         this.columnsToDisplay.push('AgentsId');
@@ -646,7 +720,9 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
         this.columnsToDisplay.push('AgentsProjects');
       }
     }
+
     if (this.TabelaEvents) {
+      request = request.concat(`events=True&`);
       if (this.EventsId) {
         request = request.concat(`EventsId=True&`);
         this.columnsToDisplay.push('EventsId');
@@ -682,6 +758,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaSpaces) {
+      request = request.concat(`spaces=True&`);
       if (this.SpacesId) {
         request = request.concat(`SpacesId=True&`);
         this.columnsToDisplay.push('SpacesId');
@@ -741,6 +818,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaEventOcur) {
+      request = request.concat(`eventOcur=True&`);
       if (this.EventOcurId) {
         request = request.concat(`EventOcurId=True&`);
         this.columnsToDisplay.push('EventOcurId');
@@ -776,6 +854,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     }
 
     if (this.TabelaProject) {
+      request = request.concat(`project=True&`);
       if (this.ProjectId) {
         request = request.concat(`ProjectId=True&`);
         this.columnsToDisplay.push('ProjectId');
@@ -827,6 +906,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
   filtrar() {
     this.showchips();
+    this.columnsToDisplay = [];
     var request = this.criarStringRequest();
 
     Swal.fire({
@@ -839,9 +919,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
             new Promise((resolve, reject) => {
               this.requestsService
                 .listarTabelaProductor(
-                  `?page=1&per_page=${
-                    this.rowsPerPage
-                  }&${this.criarStringRequest()}`
+                  `?page=1&per_page=${this.rowsPerPage}&${request}`
                 )
                 .subscribe({
                   next: (value) => {
@@ -873,6 +951,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
         }
       },
     });
+    console.log(this.columnsToDisplay);
   }
 
   async addFiltroSelect(event: any, nome: keyof filterSelected, id: any) {
@@ -908,8 +987,10 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.eventoService.listarEventosCommon().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.eventos.push(element);
+          value.forEach((element, index) => {
+            if (index < 300) {
+              this.eventos.push(element);
+            }
           });
           resolve(true);
         },
@@ -940,7 +1021,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       this.projetoService.listarProjetosProductor().subscribe({
         next: (value) => {
           value.forEach((element, index) => {
-            if (index < 10) {
+            if (index < 100) {
               this.projetos.push(element);
             }
           });
@@ -960,7 +1041,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       this.clasEtariaService.listarClasEtariasProductor().subscribe({
         next: (value) => {
           value.forEach((element, index) => {
-            if (index < 10) {
+            if (index < 100) {
               this.clasesEtarias.push(element);
             }
           });
@@ -978,7 +1059,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       this.proprietarioEspacoService.listarProprietarioEspaco().subscribe({
         next: (value) => {
           value.forEach((element, index) => {
-            if (index < 10) {
+            if (index < 100) {
               this.donoEspacos.push(element);
             }
           });
@@ -996,7 +1077,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
       this.proprietarioEventoService.listarProprietarioEvento().subscribe({
         next: (value) => {
           value.forEach((element, index) => {
-            if (index < 10) {
+            if (index < 100) {
               this.donoEventos.push(element);
             }
           });
@@ -1026,6 +1107,7 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
   async handlePageEvent(event: PageEvent) {
     this.dataSource = new MatTableDataSource();
+    this.columnsToDisplay = [];
 
     if (event.pageSize != this.rowsPerPage) {
       Swal.fire({
@@ -1261,21 +1343,91 @@ export class UsuarioProdutorComponent implements OnInit, AfterViewInit {
 
   SelectEvents(event: any) {
     this.TabelaEvents = !this.TabelaEvents;
+    if (this.TabelaEvents) {
+      this.filterForm.controls.eventos.enable();
+      this.filterForm.controls.clasEtarias.enable();
+      if (this.TabelaAgents) this.filterForm.controls.donoEventos.enable();
+    } else {
+      this.filterForm.controls.donoEventos.disable();
+      this.filterForm.controls.donoEventos.setValue(null);
+      this.filterSelected['donoEvento' as keyof filterSelected] = undefined;
+      this.filterForm.controls.eventos.disable();
+      this.filterForm.controls.eventos.setValue(null);
+      this.filterSelected['evento' as keyof filterSelected] = undefined;
+      this.filterForm.controls.clasEtarias.disable();
+      this.filterForm.controls.clasEtarias.setValue(null);
+      this.filterSelected['clasEtaria' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectSpaces(event: any) {
     this.TabelaSpaces = !this.TabelaSpaces;
+    if (this.TabelaSpaces) {
+      this.filterForm.controls.espacos.enable();
+      if (this.TabelaAgents) this.filterForm.controls.donoEspacos.enable();
+    } else {
+      this.filterForm.controls.donoEspacos.disable();
+      this.filterForm.controls.donoEspacos.setValue(null);
+      this.filterSelected['donoEspaco' as keyof filterSelected] = undefined;
+      this.filterForm.controls.espacos.disable();
+      this.filterForm.controls.espacos.setValue(null);
+      this.filterSelected['espaco' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectEventOcur(event: any) {
     this.TabelaEventOcur = !this.TabelaEventOcur;
+    if (this.TabelaEventOcur) {
+      this.filterForm.controls.dataInicial.enable();
+      this.filterForm.controls.dataFinal.enable();
+    } else {
+      this.filterForm.controls.dataInicial.disable();
+      this.filterForm.controls.dataFinal.disable();
+      this.filterSelected['data_inicio' as keyof filterSelected] = undefined;
+      this.filterSelected['data_fim' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectProject(event: any) {
     this.TabelaProject = !this.TabelaProject;
+    if (this.TabelaProject) {
+      this.filterForm.controls.projetos.enable();
+      if (this.TabelaAgents) this.filterForm.controls.donoProjetos.enable();
+    } else {
+      this.filterForm.controls.donoProjetos.disable();
+      this.filterForm.controls.donoProjetos.setValue(null);
+      this.filterSelected['donoProjeto' as keyof filterSelected] = undefined;
+      this.filterForm.controls.projetos.disable();
+      this.filterForm.controls.projetos.setValue(null);
+      this.filterSelected['projeto' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectAgents(event: any) {
     this.TabelaAgents = !this.TabelaAgents;
+    if (this.TabelaAgents) {
+      if (this.TabelaSpaces) this.filterForm.controls.donoEspacos.enable();
+
+      if (this.TabelaEvents) this.filterForm.controls.donoEventos.enable();
+
+      if (this.TabelaProject) this.filterForm.controls.donoProjetos.enable();
+    } else {
+      this.filterForm.controls.donoEspacos.disable();
+      this.filterForm.controls.donoEventos.disable();
+      this.filterForm.controls.donoProjetos.disable();
+      this.filterForm.controls.donoEspacos.setValue(null);
+      this.filterForm.controls.donoEventos.setValue(null);
+      this.filterForm.controls.donoProjetos.setValue(null);
+      this.filterSelected['donoEspaco' as keyof filterSelected] = undefined;
+      this.filterSelected['donoEvento' as keyof filterSelected] = undefined;
+      this.filterSelected['donoProjeto' as keyof filterSelected] = undefined;
+    }
+  }
+
+  gerarCSV() {
+    this.columnsToDisplay = [];
+    const request = this.criarStringRequest();
+    console.log(request);
+    this.requestsService.gerarCSVProductor(request);
   }
 }
