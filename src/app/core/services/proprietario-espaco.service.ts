@@ -13,13 +13,11 @@ export class ProprietarioEspacoService {
   constructor(private http: HttpClient) {}
 
   listarProprietarioEspaco(): Observable<APIReturns[]> {
-    return this.http.get<any>(
-      `${this.apiUrl}/productor/spaces/owner/names`, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'ngrok-skip-browser-warning': '546',
-        },
-      }
-    );
+    return this.http.get<any>(`${this.apiUrl}/agents/spaces`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
+      },
+    });
   }
 }

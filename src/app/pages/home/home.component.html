@@ -12,7 +12,10 @@
 
         <mat-button-toggle-group [formControl]="Relatorio" (change)="navigateTo()">
 
-
+          <mat-button-toggle value="home/admin">
+            <mat-icon matPrefix class="std_gray">people_outline</mat-icon>
+            Usuário Administrador
+          </mat-button-toggle>
 
           <mat-button-toggle  value="home/comum">
             <mat-icon matPrefix class="std_gray">people_outline</mat-icon>
@@ -23,6 +26,7 @@
             <mat-icon matPrefix class="std_gray">work</mat-icon>
             Produtor de Eventos
           </mat-button-toggle>
+
         </mat-button-toggle-group>
 
       </div>

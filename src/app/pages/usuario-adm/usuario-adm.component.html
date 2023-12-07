@@ -25,11 +25,11 @@
 
         <!-- Filtro de evento------------------------------------------------------------------------ -->
         <mat-grid-tile [colspan]="1">
-          <mat-form-field class="form-field" appearance="outline" >
+          <mat-form-field class="form-field" appearance="outline">
 
             <mat-label>Evento</mat-label>
             <input type="text" placeholder="Evento" (blur)="addFiltroInput('eventos')" matInput
-              formControlName="eventos" [matAutocomplete]="completeEvento" >
+              formControlName="eventos" [matAutocomplete]="completeEvento" [disabled]="TabelaEvents">
             <mat-error *ngIf="filterForm.get('eventos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeEvento="matAutocomplete">
               <mat-option *ngFor="let option of eventos"
@@ -48,7 +48,7 @@
 
             <mat-label>Espaço</mat-label>
             <input type="text" placeholder="Espaço" (blur)="addFiltroInput('espacos')" matInput
-              formControlName="espacos" [matAutocomplete]="completeEspaco">
+              formControlName="espacos" [matAutocomplete]="completeEspaco" [disabled]="TabelaSpaces">
             <mat-error *ngIf="filterForm.get('espacos')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
             <mat-autocomplete autoActiveFirstOption #completeEspaco="matAutocomplete">
               <mat-option *ngFor="let option of espacos"
@@ -87,9 +87,9 @@
 
             <mat-label>Classificação Etária</mat-label>
             <input type="text" placeholder="Classificação Etária" (blur)="addFiltroInput('clasEtarias')" matInput
-              formControlName="clasEtarias" [matAutocomplete]="completeClassEtaria">
+              formControlName="clasEtarias" [matAutocomplete]="completeClasEtaria">
             <mat-error *ngIf="filterForm.get('clasEtarias')?.errors?.['invalidWord']">Filtro Inválido</mat-error>
-            <mat-autocomplete autoActiveFirstOption #completeClassEtaria="matAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #completeClasEtaria="matAutocomplete">
               <mat-option *ngFor="let option of clasesEtarias"
                 (onSelectionChange)="addFiltroSelect($event,'clasEtaria', option.name)" [value]="option.name">
                 {{option.name}}
@@ -175,10 +175,11 @@
         <mat-grid-tile>
           <mat-form-field class="form-field" appearance="outline">
             <mat-label>Data final</mat-label>
-            <input formControlName="dataFinal" (blur)="addFiltroInput('dataFinal')" (dateChange)="setDate($event)"
-              [max]="todayDate" [min]="minDate" matInput [matDatepicker]="data_final" [disabled]="true">
+            <input matInput formControlName="dataFinal" (blur)="addFiltroInput('dataFinal')"
+              (dateChange)="setDate($event)" [max]="todayDate" [min]="minDate" matInput [matDatepicker]="data_final"
+              [disabled]="true">
             <mat-datepicker-toggle matIconSuffix [for]="data_final"></mat-datepicker-toggle>
-            <mat-datepicker disabled="false" #data_final></mat-datepicker>
+            <mat-datepicker #data_final></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -194,7 +195,7 @@
       </section>
 
       <section>
-        <mat-checkbox [(ngModel)]="AgentsId" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsId" [disabled]="!TabelaAgents">
           Id
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="AgentsName" [disabled]="!TabelaAgents">
@@ -203,28 +204,28 @@
         <mat-checkbox [(ngModel)]="AgentsDescription" [disabled]="!TabelaAgents">
           Description
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsCreateTSP" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsCreateTSP" [disabled]="!TabelaAgents">
           Create TSP
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsUpdateTSP" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsUpdateTSP" [disabled]="!TabelaAgents">
           Update TSP
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsParent" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsParent" [disabled]="!TabelaAgents">
           Parent
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsTerms" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsTerms" [disabled]="!TabelaAgents">
           Terms
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsChildren" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsChildren" [disabled]="!TabelaAgents">
           Children
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsSpaces" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsSpaces" [disabled]="!TabelaAgents">
           Spaces
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsEvents" [disabled]="!TabelaAgents">
+        <mat-checkbox [(ngModel)]="AgentsEvents" [disabled]="!TabelaAgents">>
           Events
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="AgentsProjects" [disabled]="true">
+        <mat-checkbox [(ngModel)]="AgentsProjects" [disabled]="!TabelaAgents">
           Projects
         </mat-checkbox>
       </section>
@@ -238,7 +239,7 @@
       </section>
 
       <section>
-        <mat-checkbox [(ngModel)]="EventsId" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventsId" [disabled]="!TabelaEvents">
           Id
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="EventsName" [disabled]="!TabelaEvents">
@@ -247,19 +248,19 @@
         <mat-checkbox [(ngModel)]="EventsDescription" [disabled]="!TabelaEvents">
           Description
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventsCreateTSP" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventsCreateTSP" [disabled]="!TabelaEvents">
           Create TSP
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventsUpdateTSP" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventsUpdateTSP" [disabled]="!TabelaEvents">
           Update TSP
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="EventsClasEtaria" [disabled]="!TabelaEvents">
           Class Etária
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventsOwner" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventsOwner" [disabled]="!TabelaEvents">
           Owner
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventsProject" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventsProject" [disabled]="!TabelaEvents">
           Project
         </mat-checkbox>
       </section>
@@ -273,7 +274,7 @@
       </section>
 
       <section>
-        <mat-checkbox [(ngModel)]="SpacesId" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesId" [disabled]="!TabelaSpaces">
           Id
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="SpacesLocation" [disabled]="!TabelaSpaces">
@@ -286,34 +287,34 @@
         <mat-checkbox [(ngModel)]="SpacesDescription" [disabled]="!TabelaSpaces">
           Description
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesCreateTSP" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesCreateTSP" [disabled]="!TabelaSpaces">
           Create TSP
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesUpdateTSP" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesUpdateTSP" [disabled]="!TabelaSpaces">
           Update TSP
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesEventOcur" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesEventOcur" [disabled]="!TabelaSpaces">
           Event Ocur
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesHorarios" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesHorarios" [disabled]="!TabelaSpaces">
           Horarios
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesTelefone" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesTelefone" [disabled]="!TabelaSpaces">
           Telefone
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesEmail" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesEmail" [disabled]="!TabelaSpaces">
           Email
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesChildren" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesChildren" [disabled]="!TabelaSpaces">
           Children
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesTerms" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesTerms" [disabled]="!TabelaSpaces">
           SpacesTerms
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesParent" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesParent" [disabled]="!TabelaSpaces">
           PareSpacesParent
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="SpacesOwner" [disabled]="true">
+        <mat-checkbox [(ngModel)]="SpacesOwner" [disabled]="!TabelaSpaces">
           Owner
         </mat-checkbox>
       </section>
@@ -327,10 +328,10 @@
       </section>
 
       <section>
-        <mat-checkbox [(ngModel)]="EventOcurId" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurId" [disabled]="!TabelaEventOcur">
           Id
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventOcurStartsOn" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurStartsOn" [disabled]="!TabelaEventOcur">
           StartsOn
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="EventOcurStartsAt" [disabled]="!TabelaEventOcur">
@@ -339,16 +340,16 @@
         <mat-checkbox [(ngModel)]="EventOcurEndsAt" [disabled]="!TabelaEventOcur">
           EndsAt
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventOcurFrequency" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurFrequency" [disabled]="!TabelaEventOcur">
           Frequency
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventOcurSeparation" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurSeparation" [disabled]="!TabelaEventOcur">
           Separation
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventOcurEvent" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurEvent" [disabled]="!TabelaEventOcur">
           Event
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="EventOcurSpace" [disabled]="true">
+        <mat-checkbox [(ngModel)]="EventOcurSpace" [disabled]="!TabelaEventOcur">
           Space
         </mat-checkbox>
 
@@ -357,8 +358,7 @@
 
     <section>
       <section>
-        <mat-checkbox [checked]="TabelaProject" [disabled]="true" value="Spaces"
-          (change)="SelectProject($event.checked)">
+        <mat-checkbox [checked]="TabelaProject" value="Spaces" (change)="SelectProject($event.checked)">
           Tabela Project
         </mat-checkbox>
       </section>
@@ -391,6 +391,9 @@
         <mat-checkbox [(ngModel)]="ProjectChildren" [disabled]="!TabelaProject">
           Children
         </mat-checkbox>
+        <mat-checkbox [(ngModel)]="ProjectOwner" [disabled]="!TabelaProject">
+          Owner
+        </mat-checkbox>
         <mat-checkbox [(ngModel)]="ProjectEvents" [disabled]="!TabelaProject">
           Events
         </mat-checkbox>
@@ -415,9 +418,16 @@
 
 
 
-<h1>Tabela de dados de Administrador</h1>
+<h1>Tabela de dados de Usuário Admin</h1>
 <mat-card>
   <mat-card-content>
+
+    <div style="padding: 10px;">
+      <button mat-raised-button (click)="gerarCSV()" class="button-login" color="primary">
+        Gerar CSV
+      </button>
+
+    </div>
 
 
     <div class="mat-elevation-z8">

@@ -91,20 +91,26 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
   chipShow = <any>[];
   minDate = <Date>{};
   maxDate = <Date>{};
-  todayDate = new Date();
-  ninetyDaysAgo = new Date(new Date().setDate(this.todayDate.getDate() - 90));
+  todayDate = <Date>{};
+  ninetyDaysAgo = new Date(new Date().setDate(new Date().getDate() - 90));
 
   filterForm = new FormGroup({
-    eventos: new FormControl(''),
-    espacos: new FormControl(''),
-    projetos: new FormControl(''),
-    clasEtarias: new FormControl(''),
-    donoEspacos: new FormControl(''),
-    donoEventos: new FormControl(''),
-    donoProjetos: new FormControl(''),
+    eventos: new FormControl({ value: '', disabled: true }),
+    espacos: new FormControl({ value: '', disabled: true }),
+    projetos: new FormControl({ value: '', disabled: true }),
+    clasEtarias: new FormControl({ value: '', disabled: true }),
+    donoEspacos: new FormControl({ value: '', disabled: true }),
+    donoEventos: new FormControl({ value: '', disabled: true }),
+    donoProjetos: new FormControl({ value: '', disabled: true }),
 
-    dataInicial: new FormControl<Date | null>(this.ninetyDaysAgo),
-    dataFinal: new FormControl<Date | null>(this.todayDate),
+    dataInicial: new FormControl<Date | null>({
+      value: null,
+      disabled: true,
+    }),
+    dataFinal: new FormControl<Date | null>({
+      value: null,
+      disabled: true,
+    }),
   });
 
   // arrays de opçoes para os filtros ---------------------
@@ -118,13 +124,6 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
   donoProjetos: Array<APIReturns> = [];
 
   // variaveis para filtragem de filtros para os filtros ---------------------
-  filteredOptionsEventos?: Observable<APIReturns[]>;
-  filteredOptionsEspacos?: Observable<APIReturns[]>;
-  filteredOptionsProjetos?: Observable<APIReturns[]>;
-  filteredOptionsClasesEtarias?: Observable<APIReturns[]>;
-  filteredOptionsDonoEspacos?: Observable<APIReturns[]>;
-  filteredOptionsDonoEventos?: Observable<APIReturns[]>;
-  filteredOptionsDonoProjetos?: Observable<APIReturns[]>;
 
   @ViewChild('completeEvento') completeEvento: MatAutocomplete = <any>{};
   @ViewChild('completeEspaco') completeEspaco: MatAutocomplete = <any>{};
@@ -144,6 +143,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
   @ViewChild('completeClasEtaria') completeClasEtaria: MatAutocomplete = <
     any
   >{};
+
   @ViewChild(MatPaginator) paginator: MatPaginator = <any>{};
   @ViewChild(MatSort) sort: MatSort = <any>{};
 
@@ -293,8 +293,8 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
   ngOnInit(): void {
-    this.setDate(this.filterForm.controls.dataInicial.value);
-    this.setDate(this.filterForm.controls.dataFinal.value);
+    // this.setDate(this.filterForm.controls.dataInicial.value);
+    // this.setDate(this.filterForm.controls.dataFinal.value);
     this.showchips();
     var request = this.criarStringRequest();
 
@@ -525,11 +525,8 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     this.filterForm.controls.donoEventos.setValue(null);
     this.filterForm.controls.donoProjetos.setValue(null);
 
-    this.filterForm.controls.dataInicial.setValue(this.ninetyDaysAgo);
-    this.filterForm.controls.dataFinal.setValue(this.todayDate);
-
-    this.setDate(this.filterForm.controls.dataInicial.value);
-    this.setDate(this.filterForm.controls.dataFinal.value);
+    // this.filterForm.controls.dataInicial.setValue(this.ninetyDaysAgo);
+    // this.filterForm.controls.dataFinal.setValue(this.todayDate);
 
     this.completeEvento.options.forEach((element) => {
       element.deselect();
@@ -553,7 +550,77 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
       element.deselect();
     });
 
-    this.filtrar();
+    this.TabelaAgents = false;
+    this.AgentsId = false;
+    this.AgentsName = false;
+    this.AgentsDescription = false;
+    this.AgentsCreateTSP = false;
+    this.AgentsUpdateTSP = false;
+    this.AgentsParent = false;
+    this.AgentsTerms = false;
+    this.AgentsChildren = false;
+    this.AgentsSpaces = false;
+    this.AgentsEvents = false;
+    this.AgentsProjects = false;
+
+    this.TabelaEvents = false;
+    this.EventsId = false;
+    this.EventsName = false;
+    this.EventsDescription = false;
+    this.EventsCreateTSP = false;
+    this.EventsUpdateTSP = false;
+    this.EventsClasEtaria = false;
+    this.EventsOwner = false;
+    this.EventsProject = false;
+
+    this.TabelaSpaces = false;
+    this.SpacesId = false;
+    this.SpacesLocation = false;
+    this.SpacesName = false;
+    this.SpacesDescription = false;
+    this.SpacesCreateTSP = false;
+    this.SpacesUpdateTSP = false;
+    this.SpacesEventOcur = false;
+    this.SpacesHorarios = false;
+    this.SpacesTelefone = false;
+    this.SpacesEmail = false;
+    this.SpacesChildren = false;
+    this.SpacesTerms = false;
+    this.SpacesParent = false;
+    this.SpacesOwner = false;
+
+    this.TabelaEventOcur = false;
+    this.EventOcurId = false;
+    this.EventOcurStartsOn = false;
+    this.EventOcurStartsAt = false;
+    this.EventOcurEndsAt = false;
+    this.EventOcurFrequency = false;
+    this.EventOcurSeparation = false;
+    this.EventOcurEvent = false;
+    this.EventOcurSpace = false;
+
+    this.TabelaProject = false;
+    this.ProjectId = false;
+    this.ProjectName = false;
+    this.ProjectDescription = false;
+    this.ProjectCreateTSP = false;
+    this.ProjectUpdateTSP = false;
+    this.ProjectRegistrationFrom = false;
+    this.ProjectRegistrationTo = false;
+    this.ProjectParent = false;
+    this.ProjectChildren = false;
+    this.ProjectOwner = false;
+    this.ProjectEvents = false;
+
+    this.filterForm.controls.eventos.disable();
+    this.filterForm.controls.espacos.disable();
+    this.filterForm.controls.projetos.disable();
+    this.filterForm.controls.clasEtarias.disable();
+    this.filterForm.controls.donoEspacos.disable();
+    this.filterForm.controls.donoEventos.disable();
+    this.filterForm.controls.donoProjetos.disable();
+    this.filterForm.controls.dataInicial.disable();
+    this.filterForm.controls.dataFinal.disable();
   }
 
   criarStringRequest() {
@@ -571,7 +638,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
     if (this.filterSelected.clasEtaria != undefined)
       request = request.concat(
-        `classificacao_etaria=${this.filterSelected.clasEtaria}&`
+        `clas_etaria=${this.filterSelected.clasEtaria}&`
       );
 
     if (this.filterSelected.donoEspaco != undefined)
@@ -653,6 +720,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
         this.columnsToDisplay.push('AgentsProjects');
       }
     }
+
     if (this.TabelaEvents) {
       request = request.concat(`events=True&`);
       if (this.EventsId) {
@@ -838,6 +906,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   filtrar() {
     this.showchips();
+    this.columnsToDisplay = [];
     var request = this.criarStringRequest();
 
     Swal.fire({
@@ -849,7 +918,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
           await Promise.all([
             new Promise((resolve, reject) => {
               this.requestsService
-                .listarTabelaProductor(
+                .listarTabelaAdmin(
                   `?page=1&per_page=${this.rowsPerPage}&${request}`
                 )
                 .subscribe({
@@ -882,6 +951,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
         }
       },
     });
+    console.log(this.columnsToDisplay);
   }
 
   async addFiltroSelect(event: any, nome: keyof filterSelected, id: any) {
@@ -915,12 +985,13 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   async listar_eventos() {
     return new Promise((resolve, reject) => {
-      this.eventoService.listarEventosProductor().subscribe({
+      this.eventoService.listarEventosCommon().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.eventos.push(element);
+          value.forEach((element, index) => {
+            if (index < 300) {
+              this.eventos.push(element);
+            }
           });
-
           resolve(true);
         },
       });
@@ -931,7 +1002,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   async listar_espacos() {
     return new Promise((resolve, reject) => {
-      this.espacoService.listarEspacosProductor().subscribe({
+      this.espacoService.listarEspacosCommon().subscribe({
         next: (value) => {
           value.forEach((element) => {
             this.espacos.push(element);
@@ -947,11 +1018,15 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   async listar_projetos() {
     return new Promise((resolve, reject) => {
-      this.projetoService.listarProjetosProductor().subscribe({
+      this.projetoService.listarProjetosAdmin().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.projetos.push(element);
+          value.forEach((element, index) => {
+            if (index < 100) {
+              this.projetos.push(element);
+            }
           });
+          console.log('projetos aqui', this.projetos);
+          console.log('aqui o primeiro', this.projetos[0].name);
 
           resolve(true);
         },
@@ -963,10 +1038,12 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   async listar_clasEtarias() {
     return new Promise((resolve, reject) => {
-      this.clasEtariaService.listarClasEtariasProductor().subscribe({
+      this.clasEtariaService.listarClasEtariasAdmin().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.clasesEtarias.push(element);
+          value.forEach((element, index) => {
+            if (index < 100) {
+              this.clasesEtarias.push(element);
+            }
           });
 
           resolve(true);
@@ -981,8 +1058,10 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.proprietarioEspacoService.listarProprietarioEspaco().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.donoEspacos.push(element);
+          value.forEach((element, index) => {
+            if (index < 100) {
+              this.donoEspacos.push(element);
+            }
           });
 
           resolve(true);
@@ -997,8 +1076,10 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.proprietarioEventoService.listarProprietarioEvento().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.donoEventos.push(element);
+          value.forEach((element, index) => {
+            if (index < 100) {
+              this.donoEventos.push(element);
+            }
           });
 
           resolve(true);
@@ -1013,10 +1094,11 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.proprietarioProjetoService.listarProprietarioProjeto().subscribe({
         next: (value) => {
-          value.forEach((element) => {
-            this.donoProjetos.push(element);
+          value.forEach((element, index) => {
+            if (index < 10) {
+              this.donoProjetos.push(element);
+            }
           });
-
           resolve(true);
         },
       });
@@ -1039,7 +1121,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
           try {
             await new Promise((resolve, reject) => {
               this.requestsService
-                .listarTabelaProductor(
+                .listarTabelaAdmin(
                   `?page=${this.paginaAtual}&per_page=${
                     event.pageSize
                   }&${this.criarStringRequest()}`
@@ -1085,7 +1167,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
           try {
             await new Promise((resolve, reject) => {
               this.requestsService
-                .listarTabelaProductor(
+                .listarTabelaAdmin(
                   `?page=${this.paginaAtual + 1}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
@@ -1128,8 +1210,8 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
           try {
             await new Promise((resolve, reject) => {
               this.requestsService
-                .listarTabelaProductor(
-                  `?page=${this.paginaAtual - 1}&per_page=${
+                .listarTabelaAdmin(
+                  `page=${this.paginaAtual - 1}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
                 )
@@ -1175,7 +1257,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
           try {
             await new Promise((resolve, reject) => {
               this.requestsService
-                .listarTabelaProductor(
+                .listarTabelaAdmin(
                   `?page=1&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
@@ -1219,7 +1301,7 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
           try {
             await new Promise((resolve, reject) => {
               this.requestsService
-                .listarTabelaProductor(
+                .listarTabelaAdmin(
                   `?page=${this.ultimaPagina}&per_page=${
                     this.rowsPerPage
                   }&${this.criarStringRequest()}`
@@ -1261,21 +1343,91 @@ export class UsuarioAdmComponent implements OnInit, AfterViewInit {
 
   SelectEvents(event: any) {
     this.TabelaEvents = !this.TabelaEvents;
+    if (this.TabelaEvents) {
+      this.filterForm.controls.eventos.enable();
+      this.filterForm.controls.clasEtarias.enable();
+      if (this.TabelaAgents) this.filterForm.controls.donoEventos.enable();
+    } else {
+      this.filterForm.controls.donoEventos.disable();
+      this.filterForm.controls.donoEventos.setValue(null);
+      this.filterSelected['donoEvento' as keyof filterSelected] = undefined;
+      this.filterForm.controls.eventos.disable();
+      this.filterForm.controls.eventos.setValue(null);
+      this.filterSelected['evento' as keyof filterSelected] = undefined;
+      this.filterForm.controls.clasEtarias.disable();
+      this.filterForm.controls.clasEtarias.setValue(null);
+      this.filterSelected['clasEtaria' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectSpaces(event: any) {
     this.TabelaSpaces = !this.TabelaSpaces;
+    if (this.TabelaSpaces) {
+      this.filterForm.controls.espacos.enable();
+      if (this.TabelaAgents) this.filterForm.controls.donoEspacos.enable();
+    } else {
+      this.filterForm.controls.donoEspacos.disable();
+      this.filterForm.controls.donoEspacos.setValue(null);
+      this.filterSelected['donoEspaco' as keyof filterSelected] = undefined;
+      this.filterForm.controls.espacos.disable();
+      this.filterForm.controls.espacos.setValue(null);
+      this.filterSelected['espaco' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectEventOcur(event: any) {
     this.TabelaEventOcur = !this.TabelaEventOcur;
+    if (this.TabelaEventOcur) {
+      this.filterForm.controls.dataInicial.enable();
+      this.filterForm.controls.dataFinal.enable();
+    } else {
+      this.filterForm.controls.dataInicial.disable();
+      this.filterForm.controls.dataFinal.disable();
+      this.filterSelected['data_inicio' as keyof filterSelected] = undefined;
+      this.filterSelected['data_fim' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectProject(event: any) {
     this.TabelaProject = !this.TabelaProject;
+    if (this.TabelaProject) {
+      this.filterForm.controls.projetos.enable();
+      if (this.TabelaAgents) this.filterForm.controls.donoProjetos.enable();
+    } else {
+      this.filterForm.controls.donoProjetos.disable();
+      this.filterForm.controls.donoProjetos.setValue(null);
+      this.filterSelected['donoProjeto' as keyof filterSelected] = undefined;
+      this.filterForm.controls.projetos.disable();
+      this.filterForm.controls.projetos.setValue(null);
+      this.filterSelected['projeto' as keyof filterSelected] = undefined;
+    }
   }
 
   SelectAgents(event: any) {
     this.TabelaAgents = !this.TabelaAgents;
+    if (this.TabelaAgents) {
+      if (this.TabelaSpaces) this.filterForm.controls.donoEspacos.enable();
+
+      if (this.TabelaEvents) this.filterForm.controls.donoEventos.enable();
+
+      if (this.TabelaProject) this.filterForm.controls.donoProjetos.enable();
+    } else {
+      this.filterForm.controls.donoEspacos.disable();
+      this.filterForm.controls.donoEventos.disable();
+      this.filterForm.controls.donoProjetos.disable();
+      this.filterForm.controls.donoEspacos.setValue(null);
+      this.filterForm.controls.donoEventos.setValue(null);
+      this.filterForm.controls.donoProjetos.setValue(null);
+      this.filterSelected['donoEspaco' as keyof filterSelected] = undefined;
+      this.filterSelected['donoEvento' as keyof filterSelected] = undefined;
+      this.filterSelected['donoProjeto' as keyof filterSelected] = undefined;
+    }
+  }
+
+  gerarCSV() {
+    this.columnsToDisplay = [];
+    const request = this.criarStringRequest();
+    console.log(request);
+    this.requestsService.gerarCSVAdmin(request);
   }
 }

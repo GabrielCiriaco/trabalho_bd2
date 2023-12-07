@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { UsuarioAdmComponent } from './shared/usuario-adm/usuario-adm.component';
+import { UsuarioAdmComponent } from './pages/usuario-adm/usuario-adm.component';
 import { UsuarioComumComponent } from './pages/usuario-comum/usuario-comum.component';
 import { UsuarioProdutorComponent } from './pages/usuario-produtor/usuario-produtor.component';
 
@@ -17,11 +17,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'adm',
+        redirectTo: 'admin',
         pathMatch: 'full',
       },
       {
-        path: 'adm',
+        path: 'admin',
         component: UsuarioAdmComponent,
       },
       {

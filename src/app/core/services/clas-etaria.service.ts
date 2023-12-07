@@ -13,7 +13,7 @@ export class ClasEtariaService {
   constructor(private http: HttpClient) {}
 
   listarClasEtariasCommon(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/common/clas-etaria`, {
+    return this.http.get<any>(`${this.apiUrl}/events/clas-etaria`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',
@@ -22,7 +22,7 @@ export class ClasEtariaService {
   }
 
   listarClasEtariasProductor(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/productor/clas-etaria`, {
+    return this.http.get<any>(`${this.apiUrl}/events/clas-etaria`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',
@@ -30,8 +30,8 @@ export class ClasEtariaService {
     });
   }
 
-  listarClasEtariasAdm(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/admin/clas-etaria`, {
+  listarClasEtariasAdmin(): Observable<APIReturns[]> {
+    return this.http.get<any>(`${this.apiUrl}/events/clas-etaria`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',

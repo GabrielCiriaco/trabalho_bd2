@@ -13,7 +13,7 @@ export class EspacoService {
   constructor(private http: HttpClient) {}
 
   listarEspacosCommon(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/common/spaces/names`, {
+    return this.http.get<any>(`${this.apiUrl}/spaces/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',
@@ -22,7 +22,7 @@ export class EspacoService {
   }
 
   listarEspacosProductor(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/productor/spaces/names`, {
+    return this.http.get<any>(`${this.apiUrl}/spaces/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',
@@ -30,8 +30,8 @@ export class EspacoService {
     });
   }
 
-  listarEspacosAdm(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/admin/space`, {
+  listarEspacosAdmin(): Observable<APIReturns[]> {
+    return this.http.get<any>(`${this.apiUrl}/spaces/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',

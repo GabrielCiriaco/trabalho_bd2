@@ -13,7 +13,7 @@ export class EventoService {
   constructor(private http: HttpClient) {}
 
   listarEventosCommon(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/common/events/names`, {
+    return this.http.get<any>(`${this.apiUrl}/events/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',
@@ -22,7 +22,7 @@ export class EventoService {
   }
 
   listarEventosProductor(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/productor/events/names`, {
+    return this.http.get<any>(`${this.apiUrl}/events/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',
@@ -30,8 +30,8 @@ export class EventoService {
     });
   }
 
-  listarEventosAdm(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/admin/events`, {
+  listarEventosAdmin(): Observable<APIReturns[]> {
+    return this.http.get<any>(`${this.apiUrl}/events/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',

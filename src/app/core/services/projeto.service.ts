@@ -13,18 +13,16 @@ export class ProjetoService {
   constructor(private http: HttpClient) {}
 
   listarProjetosProductor(): Observable<APIReturns[]> {
-    return this.http.get<any>(
-      `${this.apiUrl}/productor/project/names`, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'ngrok-skip-browser-warning': '546',
-        },
-      }
-    );
+    return this.http.get<any>(`${this.apiUrl}/projects/names`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
+      },
+    });
   }
 
-  listarProjetosAdm(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/admin/projects`, {
+  listarProjetosAdmin(): Observable<APIReturns[]> {
+    return this.http.get<any>(`${this.apiUrl}/projects/names`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',

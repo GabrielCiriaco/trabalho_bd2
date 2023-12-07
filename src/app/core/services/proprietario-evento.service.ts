@@ -13,7 +13,7 @@ export class ProprietarioEventoService {
   constructor(private http: HttpClient) {}
 
   listarProprietarioEvento(): Observable<APIReturns[]> {
-    return this.http.get<any>(`${this.apiUrl}/productor/events/owner/names`, {
+    return this.http.get<any>(`${this.apiUrl}/agents/events`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'ngrok-skip-browser-warning': '546',

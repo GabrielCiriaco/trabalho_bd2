@@ -13,13 +13,11 @@ export class ProprietarioProjetoService {
   constructor(private http: HttpClient) {}
 
   listarProprietarioProjeto(): Observable<APIReturns[]> {
-    return this.http.get<any>(
-      `${this.apiUrl}/productor/project/owner/names`, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'ngrok-skip-browser-warning': '546',
-        },
-      }
-    );
+    return this.http.get<any>(`${this.apiUrl}/agents/projects`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'ngrok-skip-browser-warning': '546',
+      },
+    });
   }
 }
